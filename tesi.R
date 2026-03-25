@@ -105,3 +105,15 @@ merged_data$simplified_batch <- factor(merged_data$simplified_batch)
 
 install.packages("dplyr")
 library(dplyr)
+
+#aggiungo colonna age_at_T0 
+merged_data$age_at_T0 <- as.integer(format(as.Date(merged_data$data_prelievo_T0), "%Y")) -
+  as.integer(format(as.Date(merged_data$data_di_nascita), "%Y")) -
+  (format(as.Date(merged_data$data_prelievo_T0), "%m-%d") <
+     format(as.Date(merged_data$data_di_nascita), "%m-%d"))
+
+#sposto la colonna creata vicino alla colonna age
+library(dplyr)
+
+merged_data <- merged_data %>%
+  relocate(age_at_T0, .after = age)
