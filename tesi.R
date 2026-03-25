@@ -117,3 +117,17 @@ library(dplyr)
 
 merged_data <- merged_data %>%
   relocate(age_at_T0, .after = age)
+
+#aggiungo colonna age_at_diagnosis
+merged_data$age_at_diagnosis <- as.integer(format(as.Date(merged_data$data_diagnosi), "%Y")) -
+  as.integer(format(as.Date(merged_data$data_di_nascita), "%Y")) -
+  (format(as.Date(merged_data$data_diagnosi), "%m-%d") <
+     format(as.Date(merged_data$data_di_nascita), "%m-%d"))
+
+#sposto la colonna vicino alla colonna della data di diagnosi
+library(dplyr)
+
+merged_data <- merged_data %>%
+  relocate(age_at_diagnosis, .after = data_diagnosi)
+
+
