@@ -127,7 +127,66 @@ merged_data$age_at_diagnosis <- as.integer(format(as.Date(merged_data$data_diagn
 #sposto la colonna vicino alla colonna della data di diagnosi
 library(dplyr)
 
+#aggiungo merged_data a github
 merged_data <- merged_data %>%
   relocate(age_at_diagnosis, .after = data_diagnosi)
 
+write.csv(merged_data, "C:/AURI/Thesis_bagetto/input/merged_data.csv", row.names = FALSE)
 
+#controllo variabili
+str(merged_data)
+
+merged_data$age_at_diagnosis <- as.numeric(merged_data$age_at_diagnosis)
+class(merged_data$age_at_diagnosis)
+
+merged_data$age_at_T0 <- as.numeric(merged_data$age_at_T0)
+class(merged_data$age_at_T0)
+
+merged_data$cambio_terapia <- factor(merged_data$cambio_terapia)
+class(merged_data$cambio_terapia)
+
+merged_data$naive <- factor(merged_data$naive)
+class(merged_data$naive)
+
+merged_data$sex <- factor(merged_data$sex, levels = c("F", "M"))
+class(merged_data$sex)
+
+merged_data$smoking_habit <- factor(merged_data$sex)
+class(merged_data$smoking_habit)
+
+merged_data$antibiotic_use <- factor(merged_data$antibiotic_use)
+class(merged_data$antibiotic_use)
+
+merged_data$spike_in <- factor(merged_data$spike_in)
+class(merged_data$spike_in)
+
+merged_data$glucocorticoid_treatment <- factor(merged_data$glucocorticoid_treatment)
+class(merged_data$glucocorticoid_treatment)
+
+merged_data$gc_treatment <- factor(merged_data$gc_treatment)
+class(merged_data$gc_treatment)
+
+merged_data$prognosis_at_onset <- factor(merged_data$prognosis_at_onset)
+class(merged_data$prognosis_at_onset)
+
+merged_data$bone_marrow_lesions <- factor(merged_data$bone_marrow_lesions)
+class(merged_data$bone_marrow_lesions)
+
+merged_data$subtentorial_lesions <- factor(merged_data$subtentorial_lesions)
+class(merged_data$subtentorial_lesions)
+
+merged_data$gadolinium_contrast <- factor(merged_data$gadolinium_contrast)
+class(merged_data$gadolinium_contrast)
+
+merged_data$full_recovery <- factor(merged_data$full_recovery)
+class(merged_data$full_recovery)
+
+merged_data$sample_collection_date <- as.Date(merged_data$sample_collection_date, format = "%m/%d/%y")
+class(merged_data$sample_collection_date)
+
+merged_data$glc_date_before_t0 <- as.Date(merged_data$glc_date_before_t0, format = "%m/%d/%y")
+class(merged_data$glc_date_before_t0)
+
+str(merged_data)
+
+names(merged_data)[names(merged_data) == "disease_actvity"] <- "disease_activity"
