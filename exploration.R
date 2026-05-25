@@ -1,6 +1,6 @@
 merged <- read.csv("C:/AURI/Thesis_bagetto/input/merged_data.csv")
 str(merged)
-
+####### sistemo le variabili #######
 merged$data_di_nascita <- as.Date(merged$data_di_nascita, origin= "1899-12-30")
 merged$DATA_ESORDIO        <- as.Date(merged$DATA_ESORDIO, origin = "1899-12-30")
 merged$data_diagnosi       <- as.Date(merged$data_diagnosi, origin = "1899-12-30")
@@ -49,6 +49,7 @@ merged$gc_treatment <- factor(merged$gc_treatment,levels = c("positive", "negati
 merged$prognosis_at_onset <- factor(merged$prognosis_at_onset,levels = c("positive", "negative"))
 merged$simplified_batch<- factor (merged$simplified_batch, levels= c("1-3", "4-6"))
 
+####### sistemo la tabella e inserisco i dati mancanti #####
 #recupero colonna smoking_habit
 merged <- merge(merged,merged_data[, c("ID", "smoking_habit")], by = "ID", all.x = TRUE)
 #elimino vecchia colonna sbagliata
@@ -461,4 +462,1072 @@ merged <- merged %>%
   relocate(ID2, .after = full_recovery)
 
 merged <- merged %>% select(-ID2)
+
+
+
+#### inizio analisi esplorativa ########
+
+str(merged)
+dim(merged)
+names(merged)
+
+#### #missing values ####
+colSums(is.na(merged))
+round(colMeans(is.na(merged)) * 100, 1)
+
+#### DESCRIZIONE VARIABILI NUMERICHE #### 
+#MEDAS
+summary(merged$MEDAS)
+mean(merged$MEDAS, na.rm = TRUE)
+sd(merged$MEDAS, na.rm = TRUE)
+median(merged$MEDAS, na.rm = TRUE)
+IQR(merged$MEDAS, na.rm = TRUE)
+
+
+#età
+summary(merged$age_at_T0)
+mean(merged$age_at_T0, na.rm = TRUE)
+sd(merged$age_at_T0, na.rm = TRUE)
+median(merged$age_at_T0, na.rm = TRUE)
+IQR(merged$age_at_T0, na.rm = TRUE)
+range(merged$age_at_T0, na.rm = TRUE)
+
+summary(merged$age_at_diagnosis)
+mean(merged$age_at_diagnosis, na.rm = TRUE)
+sd(merged$age_at_diagnosis, na.rm = TRUE)
+median(merged$age_at_diagnosis, na.rm = TRUE)
+IQR(merged$age_at_diagnosis, na.rm = TRUE)
+range(merged$age_at_diagnosis, na.rm = TRUE)
+
+#bmi
+summary(merged$bmi)
+mean(merged$bmi, na.rm = TRUE)
+sd(merged$bmi, na.rm = TRUE)
+median(merged$bmi, na.rm = TRUE)
+IQR(merged$bmi, na.rm = TRUE)
+range(merged$bmi, na.rm = TRUE)
+
+#EDSS
+summary(merged$EDSS_T0)
+mean(merged$EDSS_T0, na.rm = TRUE)
+sd(merged$EDSS_T0, na.rm = TRUE)
+median(merged$EDSS_T0, na.rm = TRUE)
+IQR(merged$EDSS_T0, na.rm = TRUE)
+range(merged$EDSS_T0, na.rm = TRUE)
+
+summary(merged$EDSS_T6)
+mean(merged$EDSS_T6, na.rm = TRUE)
+sd(merged$EDSS_T6, na.rm = TRUE)
+median(merged$EDSS_T6, na.rm = TRUE)
+IQR(merged$EDSS_T6, na.rm = TRUE)
+range(merged$EDSS_T6, na.rm = TRUE)
+
+summary(merged$EDSS_T12)
+mean(merged$EDSS_T12, na.rm = TRUE)
+sd(merged$EDSS_T12, na.rm = TRUE)
+median(merged$EDSS_T12, na.rm = TRUE)
+IQR(merged$EDSS_T12, na.rm = TRUE)
+range(merged$EDSS_T12, na.rm = TRUE)
+
+summary(merged$EDSS_T18)
+mean(merged$EDSS_T18, na.rm = TRUE)
+sd(merged$EDSS_T18, na.rm = TRUE)
+median(merged$EDSS_T18, na.rm = TRUE)
+IQR(merged$EDSS_T18, na.rm = TRUE)
+range(merged$EDSS_T18, na.rm = TRUE)
+
+summary(merged$EDSS_T24)
+mean(merged$EDSS_T24, na.rm = TRUE)
+sd(merged$EDSS_T24, na.rm = TRUE)
+median(merged$EDSS_T24, na.rm = TRUE)
+IQR(merged$EDSS_T24, na.rm = TRUE)
+range(merged$EDSS_T24, na.rm = TRUE)
+
+summary(merged$EDSS_T30)
+mean(merged$EDSS_T30, na.rm = TRUE)
+sd(merged$EDSS_T30, na.rm = TRUE)
+median(merged$EDSS_T30, na.rm = TRUE)
+IQR(merged$EDSS_T30, na.rm = TRUE)
+range(merged$EDSS_T30, na.rm = TRUE)
+
+summary(merged$EDSS_T36)
+mean(merged$EDSS_T36, na.rm = TRUE)
+sd(merged$EDSS_T36, na.rm = TRUE)
+median(merged$EDSS_T36, na.rm = TRUE)
+IQR(merged$EDSS_T36, na.rm = TRUE)
+range(merged$EDSS_T36, na.rm = TRUE)
+
+#### CONTROLLO DISTRIBUZIONE VARIABILI NUMERICHE per capire come scrivere i risultati ####
+#MEDAS
+par(mfrow=c(1,3))
+hist(merged$MEDAS)
+qqnorm(merged$MEDAS)
+qqline(merged$MEDAS)
+boxplot(merged$MEDAS)
+shapiro.test(merged$MEDAS)
+
+#age_at_diagnosis
+par(mfrow=c(1,3))
+hist(merged$age_at_diagnosis)
+qqnorm(merged$age_at_diagnosis)
+qqline(merged$age_at_diagnosis)
+boxplot(merged$age_at_diagnosis)
+shapiro.test(merged$age_at_diagnosis)
+
+#age_at_T0
+par(mfrow=c(1,3))
+hist(merged$age_at_T0)
+qqnorm(merged$age_at_T0)
+qqline(merged$age_at_T0)
+boxplot(merged$age_at_T0)
+shapiro.test(merged$age_at_T0)
+
+#bmi
+par(mfrow=c(1,3))
+hist(merged$bmi)
+qqnorm(merged$bmi)
+qqline(merged$bmi)
+boxplot(merged$bmi)
+shapiro.test(merged$bmi)
+
+#EDSS_T0
+par(mfrow=c(1,3))
+hist(merged$EDSS_T0)
+qqnorm(merged$EDSS_T0)
+qqline(merged$EDSS_T0)
+boxplot(merged$EDSS_T0)
+shapiro.test(merged$EDSS_T0)
+
+#EDSS_T6
+par(mfrow=c(1,3))
+hist(merged$EDSS_T6)
+qqnorm(merged$EDSS_T6)
+qqline(merged$EDSS_T6)
+boxplot(merged$EDSS_T6)
+shapiro.test(merged$EDSS_T6)
+
+#EDSS_T12
+par(mfrow=c(1,3))
+hist(merged$EDSS_T12)
+qqnorm(merged$EDSS_T12)
+qqline(merged$EDSS_T12)
+boxplot(merged$EDSS_T12)
+shapiro.test(merged$EDSS_T12)
+
+#EDSS_T18
+par(mfrow=c(1,3))
+hist(merged$EDSS_T18)
+qqnorm(merged$EDSS_T18)
+qqline(merged$EDSS_T18)
+boxplot(merged$EDSS_T18)
+shapiro.test(merged$EDSS_T18)
+
+#EDSS_T24
+par(mfrow=c(1,3))
+hist(merged$EDSS_T24)
+qqnorm(merged$EDSS_T24)
+qqline(merged$EDSS_T24)
+boxplot(merged$EDSS_T24)
+shapiro.test(merged$EDSS_T24)
+
+#EDSS_T30
+par(mfrow=c(1,3))
+hist(merged$EDSS_T30)
+qqnorm(merged$EDSS_T30)
+qqline(merged$EDSS_T30)
+boxplot(merged$EDSS_T30)
+shapiro.test(merged$EDSS_T30)
+
+#EDSS_T36
+par(mfrow=c(1,3))
+hist(merged$EDSS_T36)
+qqnorm(merged$EDSS_T36)
+qqline(merged$EDSS_T36)
+boxplot(merged$EDSS_T36)
+shapiro.test(merged$EDSS_T36)
+
+
+#### VARIABILI CATEGORICHE #####
+#smoking_habit
+table(merged$smoking_habit)
+prop.table(table(merged$smoking_habit)) * 100
+
+#physical activity
+merged$physical_activity <- factor(merged$physical_activity, levels = c("sedentary", "partially_active", "active"), ordered = TRUE)
+table(merged$physical_activity)
+prop.table(table(merged$physical_activity)) * 100
+
+#lesion_burden
+table(merged$lesion_burden)
+prop.table(table(merged$lesion_burden)) * 100
+
+#clinical_presentation
+table(merged$clinical_presentation)
+prop.table(table(merged$clinical_presentation)) * 100
+
+#naive
+table(merged$naive)
+prop.table(table(merged$naive)) * 100
+
+#sex
+table(merged$sex)
+prop.table(table(merged$sex)) * 100
+
+#antibiotic_use
+table(merged$antibiotic_use)
+prop.table(table(merged$antibiotic_use)) * 100
+
+#glucocorticoid_treatment
+table(merged$glucocorticoid_treatment)
+prop.table(table(merged$glucocorticoid_treatment)) * 100
+
+#bone_marrow_lesions
+table(merged$bone_marrow_lesions)
+prop.table(table(merged$bone_marrow_lesions)) * 100
+
+#subtentorial_lesions
+table(merged$subtentorial_lesions)
+prop.table(table(merged$subtentorial_lesions)) * 100
+
+#gadolinium_contrast
+table(merged$gadolinium_contrast)
+prop.table(table(merged$gadolinium_contrast)) * 100
+
+#full_recovery
+table(merged$full_recovery)
+prop.table(table(merged$full_recovery)) * 100
+
+#cambio_terapia
+table(merged$cambio_terapia)
+prop.table(table(merged$cambio_terapia)) * 100
+
+##### tableone ####
+install.packages("tableone")
+library(tableone)
+vars <- c("MEDAS",  "age_at_diagnosis",  "age_at_T0",  "smoking_habit", "physical_activity", "EDSS_T0", "EDSS_T6", "EDSS_T12", "EDSS_T18", "EDSS_T24", "EDSS_T30", "EDSS_T36", "lesion_burden", "clinical_presentation", "naive", "sex", "bmi", "antibiotic_use", "glucocorticoid_treatment", "bone_marrow_lesions", "subtentorial_lesions", "gadolinium_contrast", "full_recovery")
+factorVars <- c("smoking_habit",  "physical_activity",  "lesion_burden",  "clinical_presentation",  "naive",  "sex",  "antibiotic_use",  "glucocorticoid_treatment",  "bone_marrow_lesions",  "subtentorial_lesions",  "gadolinium_contrast",  "full_recovery")
+table1 <- CreateTableOne(vars = vars, data = merged, factorVars = factorVars)
+print(table1)
+
+install.packages("gtsummary")
+library(gtsummary)
+
+library(gtsummary)
+
+merged %>%
+  select(all_of(vars)) %>%
+  tbl_summary()
+install.packages("xfun")
+library(dplyr)
+library(gtsummary)
+
+# ANALISI LONGITUDINALE
+### ANALISI DESCRITTIVA LONGITUDINALE EDSS #####
+#Mediana/IQR a ogni tempo
+median(merged$EDSS_T0, na.rm=TRUE)
+IQR(merged$EDSS_T0, na.rm=TRUE)
+
+median(merged$EDSS_T6, na.rm=TRUE)
+IQR(merged$EDSS_T6, na.rm=TRUE)
+
+median(merged$EDSS_T12, na.rm=TRUE)
+IQR(merged$EDSS_T12, na.rm=TRUE)
+
+median(merged$EDSS_T18, na.rm=TRUE)
+IQR(merged$EDSS_T18, na.rm=TRUE)
+
+median(merged$EDSS_T24, na.rm=TRUE)
+IQR(merged$EDSS_T24, na.rm=TRUE)
+
+median(merged$EDSS_T30, na.rm=TRUE)
+IQR(merged$EDSS_T30, na.rm=TRUE)
+
+median(merged$EDSS_T36, na.rm=TRUE)
+IQR(merged$EDSS_T36, na.rm=TRUE)
+
+#Numero di pazienti disponibili per ogni visita
+sum(!is.na(merged$EDSS_T0))
+sum(!is.na(merged$EDSS_T6))
+sum(!is.na(merged$EDSS_T12))
+sum(!is.na(merged$EDSS_T18))
+sum(!is.na(merged$EDSS_T24))
+sum(!is.na(merged$EDSS_T30))
+sum(!is.na(merged$EDSS_T36))
+
+#Andamento disabilità nel tempo -> mediana della coorte nel tempo (ricorda che il numero di pazienti varia ad ogni tempo)
+edss_medians <- c(
+  median(merged$EDSS_T0, na.rm=TRUE),
+  median(merged$EDSS_T6, na.rm=TRUE),
+  median(merged$EDSS_T12, na.rm=TRUE),
+  median(merged$EDSS_T18, na.rm=TRUE),
+  median(merged$EDSS_T24, na.rm=TRUE),
+  median(merged$EDSS_T30, na.rm=TRUE),
+  median(merged$EDSS_T36, na.rm=TRUE)
+)
+
+time <- c(0,6,12,18,24,30,36)
+
+plot(time, edss_medians, type="b")
+
+
+time <- c(0,6,12,18,24,30,36)
+
+#Line plot della mediana/media nel tempo -> trend globale per vedere miglioramento, peggioramento o stabilità
+edss_medians <- c(
+  median(merged$EDSS_T0, na.rm=TRUE),
+  median(merged$EDSS_T6, na.rm=TRUE),
+  median(merged$EDSS_T12, na.rm=TRUE),
+  median(merged$EDSS_T18, na.rm=TRUE),
+  median(merged$EDSS_T24, na.rm=TRUE),
+  median(merged$EDSS_T30, na.rm=TRUE),
+  median(merged$EDSS_T36, na.rm=TRUE)
+)
+
+plot(
+  time,
+  edss_medians,
+  type="b",
+  pch=16,
+  col="blue",
+  lwd=2,
+  xlab="Months",
+  ylab="Median EDSS"
+)
+
+par(mfrow=c(1,1))
+
+#Boxplot longitudinali EDSS -> mediana, variabilità, outlier, dispersione, eventuale peggioramento
+boxplot(
+  merged$EDSS_T0,
+  merged$EDSS_T6,
+  merged$EDSS_T12,
+  merged$EDSS_T18,
+  merged$EDSS_T24,
+  merged$EDSS_T30,
+  merged$EDSS_T36,
+  
+  names=c("T0","T6","T12","T18","T24","T30","T36"),
+  
+  col="lightblue",
+  
+  ylab="EDSS",
+  xlab="Follow-up"
+)
+
+#### RELAPSE #####
+table(merged$relapse_T6)
+prop.table(table(merged$relapse_T6))*100
+
+table(merged$relapse_T12)
+prop.table(table(merged$relapse_T12))*100
+
+table(merged$relapse_T18)
+prop.table(table(merged$relapse_T18))*100
+
+table(merged$relapse_T24)
+prop.table(table(merged$relapse_T24))*100
+
+table(merged$relapse_T30)
+prop.table(table(merged$relapse_T30))*100
+
+table(merged$relapse_T36)
+prop.table(table(merged$relapse_T36))*100
+
+# Relapses occurred in: 17% at T6 (esempio)
+
+
+#Barplot percentuali: Percentage of patients experiencing relapse at each follow-up.
+relapse_perc <- c(prop.table(table(merged$relapse_T6))[2]*100, prop.table(table(merged$relapse_T12))[2]*100, prop.table(table(merged$relapse_T18))[2]*100, prop.table(table(merged$relapse_T24))[2]*100,prop.table(table(merged$relapse_T30))[2]*100, prop.table(table(merged$relapse_T36))[2]*100)
+
+time <- c("T6","T12","T18","T24", "T30", "T36")
+
+barplot(
+  relapse_perc,
+  names.arg=time,
+  col="tomato",
+  ylab="% relapse"
+)
+
+###### ANALISI LESIONI #####
+table(merged$lesioni_T6)
+prop.table(table(merged$lesioni_T6))*100
+
+table(merged$lesioni_T12)
+prop.table(table(merged$lesioni_T12))*100
+
+table(merged$lesioni_T18)
+prop.table(table(merged$lesioni_T18))*100
+
+table(merged$lesioni_T24)
+prop.table(table(merged$lesioni_T24))*100
+
+table(merged$lesioni_T30)
+prop.table(table(merged$lesioni_T30))*100
+
+table(merged$lesioni_T36)
+prop.table(table(merged$lesioni_T36))*100
+
+lesioni_perc <- c(
+  
+  mean(merged$lesioni_T6 == "1", na.rm=TRUE) * 100,
+  
+  mean(merged$lesioni_T12 == "1", na.rm=TRUE) * 100,
+  
+  mean(merged$lesioni_T18 == "1", na.rm=TRUE) * 100,
+  
+  mean(merged$lesioni_T24 == "1", na.rm=TRUE) * 100,
+  
+  mean(merged$lesioni_T30 == "1", na.rm=TRUE) * 100,
+  
+  mean(merged$lesioni_T36 == "1", na.rm=TRUE) * 100
+)
+
+plot(
+  c(6,12,18,24,30,36),
+  lesioni_perc,
+  
+  type="b",
+  pch=16,
+  lwd=2,
+  col="darkgreen",
+  
+  xlab="Months",
+  ylab="% patients with new lesions",
+  
+  ylim=c(0,100)
+)
+
+
+#### CORTISONE #####
+table(merged$cortisone_T6)
+prop.table(table(merged$cortisone_T6))*100
+
+table(merged$cortisone_T12)
+prop.table(table(merged$cortisone_T12))*100
+
+table(merged$cortisone_T18)
+prop.table(table(merged$cortisone_T18))*100
+
+table(merged$cortisone_T24)
+prop.table(table(merged$cortisone_T24))*100
+
+table(merged$cortisone_T30)
+prop.table(table(merged$cortisone_T30))*100
+
+table(merged$cortisone_T36)
+prop.table(table(merged$cortisone_T36))*100
+
+#### formato long ####
+library(tidyverse)
+library(tidyr)
+long_data <- merged %>%
+  
+  pivot_longer(
+    
+    cols = matches(
+      "^(EDSS|relapse|lesion|cortisone)_T"
+    ),
+    
+    names_to = c(".value", "time"),
+    
+    names_pattern = "(.*)_T(.*)"
+  )
+
+head(long_data)
+str(long_data)
+
+#trasformo time in variabile num
+long_data$time <- as.numeric(long_data$time)
+str(long_data)
+#per controllare le variabili binarie
+table(long_data$relapse)
+
+# grafico longitudinale con ggplot: mediana EDSS nel tempo
+ggplot(long_data,
+       aes(x=time, y=EDSS)) +
+  
+  geom_boxplot(fill="lightblue") +
+  
+  xlab("Months") +
+  ylab("EDSS")
+
+# relapse longitudinali
+ggplot(long_data,
+       aes(x=factor(time),
+           fill=relapse)) +
+  
+  geom_bar(position="fill") +
+  
+  ylab("Proportion")
+
+# percentuale relapse nel tempo
+long_data %>%
+  
+  group_by(time) %>%
+  
+  summarise(
+    relapse_rate =
+      mean(relapse == "1",
+           na.rm=TRUE)*100
+  )
+
+### FRIEDMAN TEST EDSS #####
+#disabilità cambia nel tempo?
+# seleziono solo EDSS
+long_data %>%
+  
+  group_by(time) %>%
+  
+  summarise(
+    relapse_rate =
+      mean(relapse == "1",
+           na.rm=TRUE)*100
+  )
+
+edss_data_short <- merged %>%
+  
+  select(
+    ID,
+    EDSS_T0,
+    EDSS_T6,
+    EDSS_T12,
+    EDSS_T24
+  )
+
+edss_complete_short <- na.omit(edss_data_short)
+dim(edss_complete_short)
+friedman.test(
+  as.matrix(
+    edss_complete_short[, -1]
+  )
+)
+
+###### relapse longitudinali ####
+# frequenza di ricadute cambia nel tempo?
+install.packages("DescTools")
+library(DescTools)
+relapse_data <- merged %>%
+  
+  select(
+    relapse_T6,
+    relapse_T12,
+    relapse_T18,
+    relapse_T24,
+    relapse_T30,
+    relapse_T36
+  )
+# trasformo in variabile num
+relapse_data <- relapse_data %>%
+  
+  mutate(
+    across(
+      everything(),
+      ~ as.numeric(as.character(.))
+    )
+  )
+
+# cochranQtest
+CochranQTest(
+  as.matrix(relapse_data)
+)
+
+
+### lesioni longitudinali ####
+# l'attività radiologica cambia nel tempo?
+# stesso procedimento di relapse
+library(dplyr)
+library(tidyverse)
+#uso solo timepoint con variabilità
+lesion_data <- merged %>%
+  
+  select(
+    lesioni_T6,
+    lesioni_T12,
+    lesioni_T18
+  )
+
+#trasformo in numeric
+lesion_data <- lesion_data %>%
+  
+  mutate(
+    across(
+      everything(),
+      ~ as.numeric(as.character(.))
+    )
+  )
+#elimino NA
+lesion_complete <- na.omit(lesion_data)
+#controllo variabilità
+summary(lesion_complete)
+apply(lesion_complete, 2, table)
+
+#cochrantest
+library(DescTools)
+
+CochranQTest(
+  as.matrix(lesion_complete)
+)
+
+#####figure nel tempo####
+#EDSS: boxplot longitudinale
+
+ggplot(
+  long_data,
+  aes(
+    x = factor(time),
+    y = EDSS
+  )
+) +
+  
+  geom_boxplot(
+    fill = "lightblue",
+    color = "darkblue"
+  ) +
+  
+  theme_minimal() +
+  
+  xlab("Follow-up (months)") +
+  
+  ylab("EDSS") +
+  
+  ggtitle("Longitudinal EDSS distribution")
+
+#relapse nel tempo: barplot percentuali
+relapse_summary <- long_data %>%
+  
+  group_by(time) %>%
+  
+  summarise(
+    relapse_rate =
+      mean(relapse == "1",
+           na.rm = TRUE) * 100
+  )
+
+ggplot(
+  relapse_summary,
+  aes(
+    x = factor(time),
+    y = relapse_rate
+  )
+) +
+  
+  geom_col(
+    fill = "tomato"
+  ) +
+  
+  theme_minimal() +
+  
+  ylim(0,100) +
+  
+  xlab("Follow-up (months)") +
+  
+  ylab("% patients with relapse") +
+  
+  ggtitle("Relapse frequency over time")
+#lesioni nel tempo: barplot o lineplot
+lesioni_summary <- long_data %>%
+  
+  group_by(time) %>%
+  
+  summarise(
+    lesioni_rate =
+      mean(lesion_burden == "1",
+           na.rm = TRUE) * 100
+  )
+
+ggplot(
+  lesioni_summary,
+  aes(
+    x = time,
+    y = lesioni_rate
+  )
+) +
+  
+  geom_line(
+    color = "darkgreen",
+    linewidth = 1.2
+  ) +
+  
+  geom_point(
+    color = "darkgreen",
+    size = 3
+  ) +
+  
+  theme_minimal() +
+  
+  ylim(0,100) +
+  
+  xlab("Follow-up (months)") +
+  
+  ylab("% patients with new lesions") +
+  
+  ggtitle("New lesions over time")
+
+#### analisi comparative: creo gruppi####
+#MEDAS alto vs basso
+merged$MEDAS_group <- ifelse(
+  merged$MEDAS >= median(merged$MEDAS, na.rm=TRUE),
+  "High",
+  "Low"
+)
+
+ifelse(
+  merged$MEDAS >= 8,
+  "High",
+  "Low"
+)
+table(merged$MEDAS_group)
+
+#MEDAS-relapseT24
+table(
+  merged$MEDAS_group,
+  merged$relapse_T24
+)
+
+fisher.test(
+  table(
+    merged$MEDAS_group,
+    merged$relapse_T24
+  )
+)
+
+#physical activity
+table(merged$physical_activity)
+#physical activity-EDSST24
+kruskal.test(
+  EDSS_T24 ~ physical_activity,
+  data = merged
+)
+#physical acitvity-relapseT24
+table(
+  merged$physical_activity,
+  merged$relapse_T24
+)
+
+#smoking
+table(merged$smoking_habit)
+
+#smoking-EDSST24
+wilcox.test(
+  EDSS_T24 ~ smoking_habit,
+  data = merged, exact= FALSE
+)
+#smoking-relapseT24
+fisher.test(
+  table(
+    merged$smoking_habit,
+    merged$relapse_T24
+  )
+)
+
+#sex
+table(merged$sex)
+#sez-EDSST24
+wilcox.test(
+  EDSS_T24 ~ sex,
+  data = merged, exact= FALSE
+)
+
+
+#naive vs non naive
+table(merged$naive)
+#naive-relapse T24
+fisher.test(
+  table(
+    merged$naive,
+    merged$relapse_T24
+  )
+)
+
+#naive-EDSST24
+wilcox.test(
+  EDSS_T24 ~ naive,
+  data = merged, exact= FALSE
+)
+
+#BMI
+merged$BMI_group <- case_when(
+  
+  merged$bmi < 25 ~ "Normal",
+  
+  merged$bmi >= 25 ~ "Overweight"
+)
+
+table(merged$BMI_group)
+
+#BMI-EDSST24
+wilcox.test(
+  EDSS_T24 ~ BMI_group,
+  data = merged,
+  exact = FALSE
+)
+
+aggregate(
+  EDSS_T24 ~ BMI_group,
+  data = merged,
+  median,
+  na.rm = TRUE
+)
+
+ggplot(
+  merged,
+  aes(
+    x = BMI_group,
+    y = EDSS_T24
+  )
+) +
+  
+  geom_boxplot(
+    fill = "orange"
+  ) +
+  
+  theme_minimal() +
+  
+  xlab("BMI group") +
+  
+  ylab("EDSS at T24")
+
+#relapse tra gruppi BMI
+table(
+  merged$BMI_group,
+  merged$relapse_T24
+)
+
+fisher.test(
+  table(
+    merged$BMI_group,
+    merged$relapse_T24
+  )
+)
+
+#lesioni tra gruppi BMI
+fisher.test(
+  table(
+    merged$BMI_group,
+    merged$lesioni_T24
+  )
+)
+
+
+#full recovery tra gruppi BMI
+fisher.test(
+  table(
+    merged$BMI_group,
+    merged$full_recovery
+  )
+)
+
+#MEDAS-full recovery
+fisher.test(
+  table(
+    merged$MEDAS_group,
+    merged$full_recovery
+  )
+)
+
+#physical activity-full recovery
+fisher.test(
+  table(
+    merged$physical_activity,
+    merged$full_recovery
+  )
+)
+
+#senza creare gruppi potrei:
+cor.test(
+  merged$MEDAS,
+  merged$EDSS_T24,
+  method = "spearman", exact= FALSE
+)
+
+####### fase INTERPRETATIVA ########
+#considero la progressione clinica
+merged$delta_EDSS <- merged$EDSS_T24 - merged$EDSS_T0 #peggioramento, stabile, miglioramento
+#confronto con MEDAS
+wilcox.test(
+  delta_EDSS ~ MEDAS_group,
+  data = merged,
+  exact = FALSE
+)
+
+ggplot(
+  merged,
+  aes(
+    x = MEDAS_group,
+    y = delta_EDSS
+  )
+) +
+  
+  geom_boxplot(fill="skyblue") +
+  
+  theme_minimal()
+
+#disease activity: stabile o attiva
+merged$disease_activity <- ifelse(
+  
+  merged$relapse_T24 == "1" |
+    merged$lesion_T24 == "1" |
+    merged$delta_EDSS > 0,
+  
+  "Yes",
+  "No"
+)
+
+
+fisher.test(
+  table(
+    merged$MEDAS_group,
+    merged$disease_activity
+  )
+)
+
+
+#####correlazioni continue#########
+#MEDAS vs EDSS
+cor.test(
+  merged$MEDAS,
+  merged$EDSS_T24,
+  method = "spearman", exact= FALSE
+)
+
+#BMI vs EDSS
+cor.test(
+  merged$bmi,
+  merged$EDSS_T24,
+  method = "spearman", exact= FALSE
+)
+
+#età vs EDSS
+cor.test(
+  merged$age_at_T0,
+  merged$EDSS_T24,
+  method = "spearman", exact= FALSE
+)
+
+####delta_EDSS#####
+merged$delta_EDSS <- merged$EDSS_T24 - merged$EDSS_T0
+summary(merged$delta_EDSS)
+#miglioramento, stabile, peggioramento
+hist(
+  merged$delta_EDSS,
+  col = "lightblue",
+  main = "Distribution of delta EDSS",
+  xlab = "EDSS_T24 - EDSS_T0"
+)
+
+####outcome clinico composito#####
+merged$disease_activity <- ifelse(
+  
+  merged$relapse_T24 == "1" |
+    merged$lesioni_T24 == "1" |
+    merged$delta_EDSS > 0,
+  
+  "Yes",
+  "No"
+)
+table(merged$disease_activity) #attività di malattia o stabile
+
+
+#####analisi mirate######
+#MEDAS VS deltaEDSS
+wilcox.test(
+  delta_EDSS ~ MEDAS_group,
+  data = merged,
+  exact = FALSE
+)
+
+ggplot(
+  merged,
+  aes(
+    x = MEDAS_group,
+    y = delta_EDSS
+  )
+) +
+  
+  geom_boxplot(fill = "skyblue") +
+  
+  theme_minimal() +
+  
+  xlab("MEDAS group") +
+  
+  ylab("Delta EDSS")
+
+
+#MEDAS VS disease_activity
+fisher.test(
+  table(
+    merged$MEDAS_group,
+    merged$disease_activity
+  )
+)
+
+
+#BMI VS deltaEDSS
+wilcox.test(
+  delta_EDSS ~ BMI_group,
+  data = merged,
+  exact = FALSE
+)
+
+#BMI VS disease_activity
+fisher.test(
+  table(
+    merged$BMI_group,
+    merged$disease_activity
+  )
+)
+
+#physical_activity VS deltaEDSS
+kruskal.test(
+  delta_EDSS ~ physical_activity,
+  data = merged
+)
+
+ggplot(
+  merged,
+  aes(
+    x = physical_activity,
+    y = delta_EDSS
+  )
+) +
+  
+  geom_boxplot(fill = "lightgreen") +
+  
+  theme_minimal()
+
+#physical_activity VS disease_activity
+fisher.test(
+  table(
+    merged$physical_activity,
+    merged$disease_activity
+  )
+)
+#smoking VS deltaEDSS
+wilcox.test(
+  delta_EDSS ~ smoking_habit,
+  data = merged,
+  exact = FALSE
+)
+
+#smoking VS disease_activity
+fisher.test(
+  table(
+    merged$smoking_habit,
+    merged$disease_activity
+  )
+)
+
+#MEDAS continuo VS deltaEDSS
+cor.test(
+  merged$MEDAS,
+  merged$delta_EDSS,
+  method = "spearman", exact= FALSE
+)
+
+#BMI continuo VS deltaEDSS
+cor.test(
+  merged$bmi,
+  merged$delta_EDSS,
+  method = "spearman", exact= FALSE
+)
 
