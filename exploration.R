@@ -1,6 +1,31 @@
 merged <- read.csv("C:/AURI/Thesis_bagetto/input/merged_data.csv")
 str(merged)
 ####### sistemo le variabili #######
+
+## DT: versione codice più compatta, da finire di completare:
+merged <- merged %>%
+  mutate(
+    across(
+      c(
+        data_di_nascita,
+        DATA_ESORDIO,
+        data_diagnosi,
+        data_prelievo_T0,
+        data_cambio_terapia,
+        data_referto_T6,
+        data_referto_T12,
+        data_referto_T18,
+        data_referto_T24,
+        data_referto_T30,
+        data_referto_T36,
+        sample_collection_date,
+        glc_date_before_t0
+      ),
+      ~ as.Date(.x, origin = "1899-12-30")), 
+
+    across(starts_with("lesioni_T"), as.factor),
+  )
+
 merged$data_di_nascita <- as.Date(merged$data_di_nascita, origin= "1899-12-30")
 merged$DATA_ESORDIO        <- as.Date(merged$DATA_ESORDIO, origin = "1899-12-30")
 merged$data_diagnosi       <- as.Date(merged$data_diagnosi, origin = "1899-12-30")

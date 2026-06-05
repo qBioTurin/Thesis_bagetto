@@ -48,6 +48,7 @@ metadata_pazienti$relapse_T12 <- factor(metadata_pazienti$relapse_T12)
 metadata_pazienti$relapse_T18 <- factor(metadata_pazienti$relapse_T18)
 metadata_pazienti$relapse_T24 <- factor(metadata_pazienti$relapse_T24)
 metadata_pazienti$relapse_T30 <- factor(metadata_pazienti$relapse_T30)
+
 metadata_pazienti$relapse_T36 <- factor(metadata_pazienti$relapse_T36)
 
 
