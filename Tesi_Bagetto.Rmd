@@ -1,0 +1,763 @@
+---
+title: "Thesis_Bagetto"
+output: pdf_document
+date: "2026-06-01"
+---
+
+The present study was conducted on patients diagnosed with multiple sclerosis, who were followed at the Neurology Department of San Luigi Gonzaga Hospital. Patient selection was based on the ongoing treatment regimen, specifically with Tecfidera, whose active compound is dimethyl fumarate. This oral medication is indicated for the treatment of relapsing-remitting multiple sclerosis (RRMS) and acts as an immunomodulatory agent, contributing to the reduction of relapse frequency while exerting a protective effect on the central nervous system against oxidative stress.
+
+The datasets used in this analysis were imported and prepared in Rstudio. 
+All required packages were loaded from an external script (library.R) to ensure reproducibility and consistency of the computational environment.
+
+```{r data import, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+merged <- read.csv("C:/AURI/Thesis_bagetto/input/merged_data.csv")
+source("library.R")
+
+```
+The dataset includes the clinical follow-up of patients, each identified by a unique identification code. For each patient, information is available on date of birth, age at the initiation of therapy (T0), sex, smoking status, physical activity level, and body mass index (BMI).
+In addition, the MEDAS (Mediterranean Diet Adherence Screener) score was considered in order to assess the dietary habits of individual patients.
+Regarding the clinical follow-up, data were collected at six-month intervals (T0, T6, T12, T18, T24, T30, T36). However, it is important to note that data are not available (NA) for all patients at each time point.
+From a clinical perspective, in relation to disease progression, the occurrence of new lesions and relapses in the six months preceding each visit were recorded at each time point, such as EDSS (Expanded Disability Status Scale).
+The primary aim of this study is to investigate patterns of improvement, progression, or stability in disease course over time.
+
+First of all an exploratory data analysis (EDA) was performed to resume the main characteristics of the dataset and evaluate data quality. This included an assessment of the dataset structure, the presence of NA values, and the distribution of the main variables.
+The dimensions and structure of the dataset were examined to understand the available variables and the number of observations.
+
+```{r data structure}
+str(merged)
+dim(merged)
+names(merged)
+
+```
+The presence of NA values was assessed for each variable. Both the absolute number and the percentage of missing values were calculated to evaluate data completeness.
+
+```{r missing values, echo=FALSE}
+colSums(is.na(merged))
+round(colMeans(is.na(merged)) * 100, 1)
+```
+## Numerical Variables
+
+Descriptive statistics were computed for the main numerical variables, including measures of mean, median, standard deviation (SD) and interquartile range.
+
+The variables analyzed include:
+- MEDAS score
+- Age at baseline and age at diagnosis
+- BMI
+- EDSS scores at different time points (T0–T36)
+
+
+```{r descriptive-numerical}
+
+vars <- c("MEDAS", "age_at_T0", "age_at_diagnosis", "bmi",
+          "EDSS_T0", "EDSS_T6", "EDSS_T12", "EDSS_T18",
+          "EDSS_T24", "EDSS_T30", "EDSS_T36")
+
+lapply(vars, function(v) {
+  cat("\n\n###", v, "\n")
+  print(summary(merged[[v]]))
+  print(mean(merged[[v]], na.rm = TRUE))
+  print(sd(merged[[v]], na.rm = TRUE))
+  print(median(merged[[v]], na.rm = TRUE))
+  print(IQR(merged[[v]], na.rm = TRUE))
+  print(range(merged[[v]], na.rm = TRUE))
+})
+
+```
+The distribution of the main numerical variables was assessed using graphical methods, including histograms, Q–Q plots, and boxplots. 
+
+Additionally, the Shapiro–Wilk test was performed to formally assess normality. These analyses were used to determine if variables followed a normal distribution and to decide the appropriate statistical methods and representations.
+It should be noted that the Shapiro–Wilk test is sensitive to sample size; for this reason, during assessing normality graphical analysis was also considered.
+
+The descriptive analysis of the numerical variables offers a summary of the main characteristics of the study population.
+
+The mean age at T0 was approximately 40.8 years and SD about 11.5, with values ranging from 19 to 58 years. Similarly, the mean of age at diagnosis was 38.3 years (SD = 12.0), with a larger range (19–63 years), reflecting heterogeneity within the study cohort.
+Both variables showed an approximately normal distribution, as confirmed by the Shapiro–Wilk test (p = 0.12 for age at T0 and p = 0.23 for age at diagnosis). 
+There are relatively small difference between age at diagnosis and age at baseline suggesting that, on average, patients started therapy not long after diagnosis.
+
+```{r medas-hist, fig.width=6, fig.height=5}
+hist(merged$MEDAS,
+     main = "Histogram of MEDAS",
+     xlab = "MEDAS score",
+     col = "lightblue",
+     border = "black")
+```
+
+Considering the study cohort, the MEDAS score showed a mean value of approximately 47.7 with a SD of 10.6. These results suggested a moderate adherence to the Mediterranean diet. Therefore, the distribution appeared approximately normal, as confirmed by both graphical evaluation and the Shapiro–Wilk test (p = 0.13).
+
+
+```{r bmi-boxplot, fig.width=6, fig.height=5}
+boxplot(merged$bmi,
+        main = "Boxplot of BMI",
+        ylab = "BMI",
+        col = "lightgreen")
+
+```
+BMI showed a mean value of 24.5 (SD = 3.8), indicating that, on average, patients had a body weight slightly above the normal range. However, since values ranged from 17.1 to 34.8, individuals in both underweight and overweight categories were present.
+The Shapiro–Wilk test confirmed that the BMI distribution was approximately normal (p=0.62).
+The boxplot highlights the presence of a potential outlier, indicating a certain degree of heterogeneity in body composition within the population.
+
+```{r edss-boxplot, fig.width=6, fig.height=5}
+
+
+boxplot(merged$EDSS_T0,
+        main = "Boxplot of EDSS at Baseline (T0)",
+        ylab = "EDSS score",
+        col = "lightcoral",
+        border = "black")
+
+abline(h = mean(merged$EDSS_T0, na.rm = TRUE),
+       col = "blue",
+       lwd = 2,
+       lty = 2)
+
+
+```
+
+The EDSS scores at different time points (T0–T36) showed mean values ranging between approximately 0.9 and 1.5, indicating relatively low levels of disability within the study cohort. 
+
+Overall, the distribution of EDSS values appeared non-normal and slightly skewed, which is consistent with the clinical nature of the variable. Non-normality was confirmed by the Shapiro–Wilk test (p < 0.05), with the exception of T30, which showed a borderline result (p=0.06).
+
+These findings suggest that non-parametric methods may be more appropriate for the analysis of EDSS, as it is non-normally distributed. Furthermore, the presence of relatively limited variability across different time points highlights the importance of further longitudinal analysis to assess the progression of the disease.
+
+Finally, it is important to highlight that missing data were present at several time points, which could affect the robustness of the analysis and should be taken into account in next steps.
+Relatively low EDSS scores are consistent with a population affected by RRMS under treatment.
+
+## Categorical Variables
+
+Categorical variables were analyzed using frequency distributions and percentages to characterize the study cohort in terms of lifestyle, clinical perspective, and treatment-related factors.
+
+About lifestyle factors, regarding smoking habits the majority of patients were non-smokers (86.96%), while levels of physical activity indicated that most patients were partially active (40.91%).
+
+Regarding clinical features, variables such as lesion burden and clinical presentation showed the heterogeneity in disease manifestation among patients. In particular, lesion burden was relatively balanced, with 45% of patients presenting lesions and 54.55% showing no lesion, indicating variability in disease severity into the population. 
+Also clinical presentation was heterogeneous, with the most frequent manifestation of sensory symptoms (36.36%), followed by brainstem involvement and optic neuritis (both 27.27%), suggesting a different clinical onset of disease.
+Also these findings highlight the heterogeneous nature of multiple sclerosis at  onset.
+
+Treatment-related variables proved that some patients had received antibiotic therapy (11.11%) and all patients with available data had experienced glucocorticoid treatment (100%), reflecting common therapeutic strategies in the treatment of multiple sclerosis. Furthermore, 25.93% of patients switched therapy, providing treatment adaptation over time.
+
+For a better characterization of disease activity, imaging-related variables, such as bone marrow lesions, subtentorial lesions and gadolinium-enhancing lesions were analyzed.
+Their presence suggests variability in disease severity and progression in this subset of patients.
+
+The majority of patients are classified as treatment-naïve at baseline (66.67%), highlighting that most cases within the cohort were newly treated individuals.
+Additionally, the sex' distribution (36.67% male, 63.33% female) reflects the already known epidemiological predominance of women with multiple sclerosis.
+
+The proportion of patients attaining full recovery (50%) provides a preliminary descriptive indication of clinical outcomes within the study cohort, suggesting variability in treatment response.
+
+```{r categorical-summary}
+
+
+# Smoking habit
+table(merged$smoking_habit)
+prop.table(table(merged$smoking_habit)) * 100
+
+# Physical activity
+merged$physical_activity <- factor(
+  merged$physical_activity,
+  levels = c("sedentary", "partially_active", "active"),
+  ordered = TRUE
+)
+table(merged$physical_activity)
+prop.table(table(merged$physical_activity)) * 100
+
+# Clinical variables
+table(merged$lesion_burden)
+prop.table(table(merged$lesion_burden)) * 100
+
+table(merged$clinical_presentation)
+prop.table(table(merged$clinical_presentation)) * 100
+
+# Demographics
+table(merged$sex)
+prop.table(table(merged$sex)) * 100
+
+table(merged$naive)
+prop.table(table(merged$naive)) * 100
+
+# Treatments
+table(merged$antibiotic_use)
+prop.table(table(merged$antibiotic_use)) * 100
+
+table(merged$glucocorticoid_treatment)
+prop.table(table(merged$glucocorticoid_treatment)) * 100
+
+table(merged$cambio_terapia)
+prop.table(table(merged$cambio_terapia)) * 100
+
+# Imaging
+table(merged$bone_marrow_lesions)
+prop.table(table(merged$bone_marrow_lesions)) * 100
+
+table(merged$subtentorial_lesions)
+prop.table(table(merged$subtentorial_lesions)) * 100
+
+table(merged$gadolinium_contrast)
+prop.table(table(merged$gadolinium_contrast)) * 100
+
+# Outcome
+table(merged$full_recovery)
+prop.table(table(merged$full_recovery)) * 100
+
+```
+Finally, a summary of both numerical and categorical variables was provided allowing for a clear overview of the dataset.
+
+In general, these results highlight the clinical and demographic heterogeneity of the study population, supporting the need for stratified and longitudinal analyses.
+
+```{r tableone}
+vars <- c("MEDAS", "age_at_diagnosis", "age_at_T0", "smoking_habit",
+          "physical_activity", "EDSS_T0", "EDSS_T6", "EDSS_T12",
+          "EDSS_T18", "EDSS_T24", "EDSS_T30", "EDSS_T36",
+          "lesion_burden", "clinical_presentation", "naive", "sex",
+          "bmi", "antibiotic_use", "glucocorticoid_treatment",
+          "bone_marrow_lesions", "subtentorial_lesions",
+          "gadolinium_contrast", "full_recovery")
+
+factorVars <- c("smoking_habit", "physical_activity", "lesion_burden",
+                "clinical_presentation", "naive", "sex",
+                "antibiotic_use", "glucocorticoid_treatment",
+                "bone_marrow_lesions", "subtentorial_lesions",
+                "gadolinium_contrast", "full_recovery")
+
+table1 <- CreateTableOne(vars = vars,
+                         data = merged,
+                         factorVars = factorVars)
+
+print(table1)
+```
+
+```{r gtsummary}
+
+
+merged %>%
+  select(all_of(vars)) %>%
+  tbl_summary(
+    type = list(
+      MEDAS ~ "continuous",
+      age_at_T0 ~ "continuous",
+      age_at_diagnosis ~ "continuous",
+      bmi ~ "continuous",
+      EDSS_T0 ~ "continuous",
+      EDSS_T6 ~ "continuous",
+      EDSS_T12 ~ "continuous",
+      EDSS_T18 ~ "continuous",
+      EDSS_T24 ~ "continuous",
+      EDSS_T30 ~ "continuous",
+      EDSS_T36 ~ "continuous"
+    ),
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{n} ({p}%)"
+    )
+  ) %>%
+  bold_labels()
+
+
+
+```
+
+## Longitudinal Analysis
+
+A longitudinal descriptive analysis was performed to evaluate disease progression during time. Given the non-normal distribution of EDSS scores, median and IQR were used to summarize disability at each time point of the follow-up.
+
+In addition, the number of patients available at each time point was assessed, because NA data were present and the sample size varied for the duration of follow-up.
+
+
+```{r EDSS summary}
+
+
+time_points <- c("T0","T6","T12","T18","T24","T30","T36")
+
+medians <- sapply(time_points, function(t) median(merged[[paste0("EDSS_", t)]], na.rm=TRUE))
+iqr <- sapply(time_points, function(t) IQR(merged[[paste0("EDSS_", t)]], na.rm=TRUE))
+n <- sapply(time_points, function(t) sum(!is.na(merged[[paste0("EDSS_", t)]])))
+
+data.frame(Time = time_points, Median = medians, IQR = iqr, N = n)
+
+```
+
+The median EDSS values ranged from 1.0 to 1.5 across the follow-up, indicating a generally stable trend in disability over time, with an increase between T12 and T24 and then a reduction to baseline scores.
+Despite these fluctuations, these values suggest that the study population maintained a low level of disability during the treatment.
+
+The number of patients available at each time point varied considerably during follow-up, with an important reduction in sample size at later visits. This reflects the presence of NA, which should be taken into account for analysis.
+
+This descriptive analysis provides a preliminary overview of disease progression, which will be further explored in subsequent longitudinal analyses.
+
+
+```{r edss-trend, fig.width=6, fig.height=5}
+
+
+time <- c(0,6,12,18,24,30,36)
+
+plot(time,
+     medians,
+     type="b",
+     pch=16,
+     col="blue",
+     lwd=2,
+     xlab="Months",
+     ylab="Median EDSS",
+     main="EDSS progression over time")
+
+
+```
+
+The graphical representation confirms the explained pattern.
+
+This trend supports the presence of transient fluctuations in disability, without evidence of sustained progression over time.
+
+```{r edss-boxplot-long, fig.width=7, fig.height=5}
+
+boxplot(
+  merged$EDSS_T0,
+  merged$EDSS_T6,
+  merged$EDSS_T12,
+  merged$EDSS_T18,
+  merged$EDSS_T24,
+  merged$EDSS_T30,
+  merged$EDSS_T36,
+
+  names=c("T0","T6","T12","T18","T24","T30","T36"),
+  col="lightblue",
+  ylab="EDSS",
+  xlab="Follow-up time"
+)
+```
+
+The boxplots provide a clear view of the distribution and variability of EDSS scores across time points. In addition, the IQRs remain relatively stable, indicating moderate variability in disability levels within the cohort.
+
+However, the presence of several outliers at different time points highlights a degree of inter-individual heterogeneity: both lower and higher EDSS values are observed, suggesting that a subset of patient experiences more pronounced changes.
+
+A transient increase in variability is observed at intermediate time points (T18–T24), and this is consistent with the changes previously identified. Later time points such as T30 show reduced dispersion, also because influenced by a smaller number of available observations.
+
+These findings emphasize that, on one hand there's a general stability at the group level, on the other individual patient trajectories may differ substantially over time.
+
+
+```{r relapse-summary}
+
+
+relapse_perc <- c(
+  prop.table(table(merged$relapse_T6))[2]*100,
+  prop.table(table(merged$relapse_T12))[2]*100,
+  prop.table(table(merged$relapse_T18))[2]*100,
+  prop.table(table(merged$relapse_T24))[2]*100,
+  prop.table(table(merged$relapse_T30))[2]*100,
+  prop.table(table(merged$relapse_T36))[2]*100
+)
+
+time <- c("T6","T12","T18","T24", "T30", "T36")
+
+barplot(relapse_perc,
+        names.arg=time,
+        col="tomato",
+        ylab="% patients with relapse",
+        main="Relapse occurrence over time")
+
+```
+
+The barplot illustrates the proportion of patients experiencing relapses at each follow-up time point. 
+The occurrence of relapses shows fluctuations over time, with an initial peak at T6 (approximately 17%), followed by a marked decrease at T12 and the absence of relapses at T18.
+A subsequent increase is observed at T24, after which relapse rates again decrease, with no events recorded at T30 and a slight increase at T36. 
+Overall, these findings suggest variability in disease activity over time, without evidence of a consistent increasing or decreasing trend in relapse occurrence.
+
+```{r lesion-trend, fig.width=6, fig.height=5}
+
+
+lesioni_perc <- c(
+  mean(merged$lesioni_T6 == "1", na.rm=TRUE) * 100,
+  mean(merged$lesioni_T12 == "1", na.rm=TRUE) * 100,
+  mean(merged$lesioni_T18 == "1", na.rm=TRUE) * 100,
+  mean(merged$lesioni_T24 == "1", na.rm=TRUE) * 100,
+  mean(merged$lesioni_T30 == "1", na.rm=TRUE) * 100,
+  mean(merged$lesioni_T36 == "1", na.rm=TRUE) * 100
+)
+
+plot(c(6,12,18,24,30,36),
+     lesioni_perc,
+     type="b",
+     pch=16,
+     lwd=2,
+     col="darkgreen",
+     xlab="Months",
+     ylab="% patients with new lesions")
+
+
+```
+
+The line plot shows the proportion of patients developing new lesions over time, providing an additional measure of disease activity. In general, the percentage of patients with new lesions remains relatively stable across most time points, with little fluctuations.
+A peak in lesion occurrence is observed at T18, followed by a decrease at T24 and a total absence of new lesions at T30. Later, a slight increase is observed again at T36.
+This shows the presence of fluctuations also in radiological disease activity.
+This variability further supports the presence of intermittent disease activity within the study cohort.
+These radiological findings are consistent with the relapsing-remitting nature of the disease.
+
+```{r cortisone-summary}
+
+table(merged$cortisone_T6)
+prop.table(table(merged$cortisone_T6))*100
+
+table(merged$cortisone_T12)
+prop.table(table(merged$cortisone_T12))*100
+
+table(merged$cortisone_T18)
+prop.table(table(merged$cortisone_T18))*100
+
+table(merged$cortisone_T24)
+prop.table(table(merged$cortisone_T24))*100
+
+table(merged$cortisone_T30)
+prop.table(table(merged$cortisone_T30))*100
+
+table(merged$cortisone_T36)
+prop.table(table(merged$cortisone_T36))*100
+
+
+```
+The proportion of patients receiving corticosteroid treatment during follow-up remained low across all time points, usually involving a small percentage of the population.
+This pattern is consistent with the clinical use of corticosteroids in multiple sclerosis, where they are typically used on demand to manage acute relapses and associated symptoms, such as functional impairment or pain.
+
+### Data Transformation to Long Format
+
+To better investigate longitudinal patterns, the dataset was reshaped from wide to long format. This modification permits a more flexible analysis of repeated measurements during follow-up and facilitates the use of advanced graphical and statistical methods.
+
+In the long format dataset, each row corresponds to a single measurement at a specific time point for each patient, to have a more detailed representation of temporal trends in EDSS scores, relapses, lesion occurrence, and corticosteroid use.
+
+```{r long-format}
+
+merged <- merged %>%
+  mutate(
+    across(
+      matches("^(relapse|lesioni|cortisone)_T"),
+      ~ as.character(.)
+    )
+  )
+
+
+long_data <- merged %>%
+  
+  pivot_longer(
+    cols = matches("^(EDSS|relapse|lesion|cortisone)_T"),
+    names_to = c(".value", "time"),
+    names_pattern = "(.*)_T(.*)"
+  )
+
+head(long_data)
+str(long_data)
+
+# trasformo time in numerico
+long_data$time <- as.numeric(long_data$time)
+str(long_data)
+
+
+```
+In this dataset repeated measurements are organized in a longitudinal structure.
+
+```{r edss-ggplot, fig.width=6, fig.height=5}
+
+
+ggplot(long_data,
+       aes(x = factor(time), y = EDSS)) +
+  
+  geom_boxplot(fill = "lightblue") +
+  
+  xlab("Months") +
+  ylab("EDSS") +
+  ggtitle("Distribution of EDSS over time")
+
+
+
+```
+The boxplot is consistent with the previous analyses, confirming the distribution of EDSS values in different time points. The graphic highlights the same general structure of the data, with relatively stable central values and limited variability within the study cohort.
+
+The use of the long format allows for a more standardized visualization of repeated measures, facilitating further longitudinal analyses and improving the interpretability of patterns across time.
+
+```{r relapse-long, fig.width=6, fig.height=5}
+
+
+ggplot(long_data %>% filter(!is.na(relapse)),
+       aes(x = factor(time),
+           fill = relapse)) +
+  
+  geom_bar(position = "fill") +
+  
+  ylab("Proportion") +
+  xlab("Months") +
+  ggtitle("Relapse proportion over time")
+
+
+```
+The proportional bar plot confirms the previously observed fluctuating pattern of relapse occurrence over time. 
+After excluding NA values, the distribution highlights variability in relapse rates across follow-up visits, without evidence of a consistent temporal trend.
+
+```{r relapse-summary-long}
+
+long_data %>%
+  
+  group_by(time) %>%
+  
+  summarise(
+    relapse_rate = mean(relapse == "1", na.rm = TRUE) * 100
+  )
+
+```
+
+Through the long-format dataset, the calculation of relapse rates confirms the fluctuating pattern of disease activity. Relapse rates ranged from 0% to 16.7%.
+The highest presence of relapses was observed at T6, followed by an important decrease at T12 and the absence of relapses at T18. A subsequent increase was noted at T24, with later fluctuations.
+These findings has no evidence of a consistent temporal trend.
+
+
+
+### Inferential Analysis: Friedman Test
+
+To formally assess if disability changed over time, a Friedman test was performed on repeated EDSS values. This test allows for the evaluation of differences in median values across different time points.
+In the analysis, just a subset of patients with complete EDSS measurements across  time points (T0, T6, T12, T24) were considered, in order to ensure comparability of repeated observations.
+As a result, the sample size was reduced compared to the full dataset, which should be considered when interpreting the findings.
+
+```{r EDSS-friedman-test}
+
+# selezione delle variabili EDSS
+edss_data_short <- merged %>%
+  select(ID, EDSS_T0, EDSS_T6, EDSS_T12, EDSS_T24)
+
+# mantengo solo soggetti completi
+edss_complete_short <- na.omit(edss_data_short)
+
+# controllo dimensione
+dim(edss_complete_short)
+
+# esecuzione test
+friedman.test(
+  as.matrix(edss_complete_short[, -1])
+)
+
+
+```
+The Friedman test did not show a statistically significant difference in EDSS scores across time points (p = 0.53), suggesting that disability levels remained stable during follow-up.
+
+This result is consistent with the descriptive analysis, which showed only transient fluctuations in EDSS without a clear pattern of progression.
+In conclusion, the observed changes in EDSS scores over time are likely attributable to random variation rather than a meaningful change in the clinical status of the cohort.
+
+
+
+### Inferential Analysis of Relapse: Cochran’s Q Test
+
+To assess if the frequency of relapse changed over time, a Cochran’s Q test was performed on repeated binary relapse data.
+
+```{r Relapse-Cochran-test}
+
+relapse_data <- merged %>%
+  select(
+    relapse_T6,
+    relapse_T12,
+    relapse_T18,
+    relapse_T24,
+    relapse_T30,
+    relapse_T36
+  ) %>%
+  mutate(
+    across(everything(), ~ as.numeric(as.character(.)))
+  )
+
+CochranQTest(as.matrix(relapse_data))
+
+
+```
+The results show that the Cochran’s Q test did not statistically displayed a significant difference in relapse frequency across time points (p = 0.42), suggesting that the portion of patients experiencing relapses remained overall stable during the follow-up period.
+
+This finding is consistent with the descriptive analysis: there were fluctuations in relapse occurrence without a clear decreasing or increasing trend over time.
+This means that the variability in relapse rates is attributable to random variation rather than a systematic change in disease activity.
+
+
+
+### Inferential Analysis of Radiological Activity: Cochran’s Q Test
+
+A Cochran’s Q test was also performed to evaluate if the occurrence of new lesions changed over time, using time points with sufficient variability.
+
+```{r Lesions-Cochran-test}
+
+# selezione dei timepoint con sufficiente variabilità
+lesion_data <- merged %>%
+  select(
+    lesioni_T6,
+    lesioni_T12,
+    lesioni_T18
+  ) %>%
+  mutate(
+    across(everything(), ~ as.numeric(as.character(.)))
+  )
+
+# rimozione dei missing
+lesion_complete <- na.omit(lesion_data)
+
+# esecuzione test
+CochranQTest(as.matrix(lesion_complete))
+
+```
+
+The Cochran’s Q test could not be computed for lesion occurrence across time points, resulting in missing test statistics.
+This issue is likely due to the limited variability in the data and the small number of complete observations after excluding NA values. 
+
+These results provide a basis for subsequent comparative analyses between patient subgroups.
+
+```{r groups}
+
+merged$MEDAS_group <- ifelse(
+  merged$MEDAS >= median(merged$MEDAS, na.rm=TRUE),
+  "High", "Low"
+)
+
+merged$BMI_group <- case_when(
+  merged$bmi < 25 ~ "Normal",
+  merged$bmi >= 25 ~ "Overweight"
+)
+
+```
+
+```{r comparative EDSS}
+
+wilcox.test(EDSS_T24 ~ MEDAS_group, data = merged)
+
+kruskal.test(EDSS_T24 ~ physical_activity, data = merged)
+
+wilcox.test(EDSS_T24 ~ smoking_habit, data = merged, exact = FALSE)
+
+wilcox.test(EDSS_T24 ~ sex, data = merged, exact = FALSE)
+
+wilcox.test(EDSS_T24 ~ naive, data = merged, exact = FALSE)
+
+wilcox.test(EDSS_T24 ~ BMI_group, data = merged, exact = FALSE)
+
+
+```
+
+The comparative analysis didn't reveal statistically significant differences in EDSS scores at T24 across the cohort. No significant associations were observed with MEDAS, physical activity, smoking habit, sex, treatment status (naïve or not), or BMI (all p > 0.05).
+
+```{r comparative relapse}
+
+fisher.test(table(merged$MEDAS_group, merged$relapse_T24))
+
+fisher.test(table(merged$physical_activity, merged$relapse_T24))
+
+fisher.test(table(merged$smoking_habit, merged$relapse_T24))
+
+fisher.test(table(merged$BMI_group, merged$relapse_T24))
+
+fisher.test(table(merged$naive, merged$relapse_T24))
+```
+Also in this case, the comparative analysis did not reveal statistically significant differences in relapse frequency at T24 across the groups considered. As before, no significant associations were observed with MEDAS score, physical activity, smoking habit, BMI, or treatment status (all p > 0.05).
+
+No clear association between characteristics at T0 and relapse occurrence was discovered within this study population.
+
+```{r comparative recovery}
+
+fisher.test(table(merged$MEDAS_group, merged$full_recovery))
+
+fisher.test(table(merged$physical_activity, merged$full_recovery))
+
+fisher.test(table(merged$BMI_group, merged$full_recovery))
+
+
+```
+
+The comparative analysis did not show statistically significant differences in full recovery across the groups considered. No significant associations were observed with dietary adherence (MEDAS), physical activity, or BMI (all p > 0.05).
+
+These findings suggest that the examined variables were not significantly associated with recovery outcomes in this cohort.
+
+
+
+### Exploratory Analysis of Disease Progression
+
+To explore clinical outcomes, additional analyses were performed with focus on disability progression and disease activity. 
+
+```{r delta-EDSS-analysis}
+
+# delta EDSS (progression)
+merged$delta_EDSS <- merged$EDSS_T24 - merged$EDSS_T0
+
+# Test between groups MEDAS
+wilcox.test(
+  delta_EDSS ~ MEDAS_group,
+  data = merged,
+  exact = FALSE
+)
+
+# Boxplot
+ggplot(
+  merged,
+  aes(
+    x = MEDAS_group,
+    y = delta_EDSS
+  )
+) +
+  geom_boxplot(fill = "skyblue") +
+  theme_minimal() +
+  xlab("MEDAS group") +
+  ylab("Change in EDSS (T24 - T0)") +
+  ggtitle("Disability progression by MEDAS group")
+
+
+```
+
+The analysis of EDSS values between T0 and T24 showed no clear differences between MEDAS groups. 
+
+Most patients showed stable disability over time, with delta EDSS values close to zero in both groups. 
+Some variability in individual cases or worsening were observed, but no consistent pattern emerged between high and low MEDAS adherence.
+
+These findings suggest that, for these patients, adherence to Mediterranean diet was not associated with disability progression.
+
+```{r disease-activity}
+
+merged$disease_activity <- ifelse(
+  merged$relapse_T24 == "1" |
+  merged$lesioni_T24 == "1" |
+  merged$delta_EDSS > 0,
+  "Yes",
+  "No"
+)
+
+# Test between groups
+fisher.test(
+  table(
+    merged$MEDAS_group,
+    merged$disease_activity
+  )
+)
+
+
+```
+
+The analysis of the outcome of composite disease activity did not reveal a statistically significant association with MEDAS group (p = 1).
+
+The part of patients classified as having active disease was similar between MEDAS groups, indicating that, in general, MEDAS score was not associated with disease activity.
+
+
+
+### Correlation Analysis
+
+To further explore potential associations between continuous variables and disability scores, Spearman correlation analyses were performed.
+
+```{r correlations}
+
+cor.test(merged$MEDAS, merged$EDSS_T24,
+         method = "spearman", exact = FALSE)
+
+cor.test(merged$bmi, merged$EDSS_T24,
+         method = "spearman", exact = FALSE)
+
+cor.test(merged$age_at_T0, merged$EDSS_T24,
+         method = "spearman", exact = FALSE)
+
+```
+
+No significant correlations were observed between EDSS and MEDAS score or BMI (both p > 0.05). These results indicate the absence of important association between these variables and EDSS levels.
+
+In contrast, a statistically positive significant correlation was found between age at baseline and EDSS at T24 (rho = 0.51, p = 0.02), suggesting that higher age is associated with higher disability.
+
+This finding is consistent with the clinical expectation, indeed disability levels tend to increase with age.
+
+
+### Conclusion
+
+Overall, the analyses suggest a generally stable disease course within the study population, characterized by limited progression of disability and fluctuations but non-persistent radiological activity over time.
+
+No significant associations were identified between lifestyle or clinical variables and the main clinical outcomes. In contrast, age emerged as a relevant factor, showing a significant association with disability levels.
+
+These findings highlight the complexity of multiple sclerosis progression and suggest that the examined factors may have a limited impact on short-term clinical outcomes.
