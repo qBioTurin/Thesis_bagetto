@@ -754,7 +754,7 @@ In contrast, a statistically positive significant correlation was found between 
 This finding is consistent with the clinical expectation, indeed disability levels tend to increase with age.
 
 
-### Conclusion
+### Conclusion 
 
 Overall, the analyses suggest a generally stable disease course within the study population, characterized by limited progression of disability and fluctuations but non-persistent radiological activity over time.
 
