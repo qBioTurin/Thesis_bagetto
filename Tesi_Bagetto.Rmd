@@ -12,7 +12,7 @@ All required packages were loaded from an external script (library.R) to ensure 
 ```{r data import, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-merged <- read.csv("C:/AURI/Thesis_bagetto/input/merged_data.csv")
+merged <- read.csv("C:/AURI/Thesis_bagetto/input/merged.csv")
 source("library.R")
 
 ```
