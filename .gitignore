@@ -1,1 +1,5 @@
 input/
+.Rhistory
+.Rproj.user/
+.gitignore
+.DS_Store

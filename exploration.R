@@ -11,8 +11,11 @@ write.csv(merged, "input/merged.csv", row.names = FALSE)
 getwd()
 setwd("C:/AURI/Thesis_Bagetto")
 ####### sistemo le variabili #######
+
+## DT: versione codice più compatta, da finire di completare:
 merged <- merged %>%
   mutate(
+    # --- DATE ---
     across(
       c(
         data_di_nascita,
@@ -29,30 +32,41 @@ merged <- merged %>%
         sample_collection_date,
         glc_date_before_t0
       ),
-      ~ as.Date(.x, origin = "1899-12-30")), 
+      ~ as.Date(.x, origin = "1899-12-30")
+    ),
+    
+    # --- FACTOR: lesioni / relapse ---
     across(starts_with("lesioni_T"), as.factor),
-    across(starts_with("relapse_T"), as.factor), 
-    across(c(cambio_terapia, bone_marrow_lesions, subtentorial_lesions, gadolinium_contrast, full_recovery), as.factor),
+    across(starts_with("relapse_T"), as.factor),
+    
+    # --- FACTOR: variabili binarie ---
+    across(
+      c(cambio_terapia, bone_marrow_lesions, subtentorial_lesions,
+        gadolinium_contrast, full_recovery),
+      as.factor
+    ),
+    
+    # --- FACTOR: yes/no ---
     across(
       c(naive, spike_in),
       ~ factor(.x, levels = c("no", "yes"))
     ),
+    
     across(
       c(smoking_habit, antibiotic_use),
       ~ factor(.x, levels = c("yes", "no"))
     ),
+    
+    # --- FACTOR: positive/negative ---
     across(
-      c(
-        glucocorticoid_treatment,
-        gc_treatment,
-        prognosis_at_onset
-      ),
+      c(glucocorticoid_treatment, gc_treatment, prognosis_at_onset),
       ~ factor(.x, levels = c("positive", "negative"))
     ),
+    
+    # --- FACTOR: sex, batch ---
     sex = factor(sex, levels = c("M", "F")),
     simplified_batch = factor(simplified_batch, levels = c("1-3", "4-6"))
   )
-
 
 ####### sistemo la tabella e inserisco i dati mancanti #####
 #recupero colonna smoking_habit
@@ -1540,29 +1554,3 @@ cor.test(
   method = "spearman", exact= FALSE
 )
 
-getwd()
-list.files(recursive = TRUE, pattern = "exploration\\.R$")
-list.files("C:/Users", recursive = TRUE, pattern = "exploration\\.R$", full.names = TRUE)
-
-normalizePath("exploration.R")
-
-rstudioapi::getSourceEditorContext()$path
-rstudioapi::getSourceEditorContext()$path
-
-setwd("C:/AURI/Thesis_bagetto")
-getwd()
-
-
-
-merged <- merged %>%
-  mutate(
-    across(
-      matches("^(relapse|lesioni|cortisone)_T"),
-      ~ as.character(.)
-    )
-  )
-
-
-
-View(merged_data)
-View(mer)
