@@ -28,3 +28,11 @@ merged_long <- expand.grid(
   ) %>%
   arrange(num, Tempo_num) %>%
   mutate(ID_long = paste0(ID, Tempo))
+
+# merge merged-batch_seq_TEC
+merged_final <- merged_long %>%
+  left_join(batch_seq_TEC, by = c("ID_long" = "ID"))
+
+# elimino la vecchia colonna spike_in 
+merged_final <- merged_final %>%
+  select(-spike_in)
