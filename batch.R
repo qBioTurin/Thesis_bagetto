@@ -1,5 +1,6 @@
-#importo dataset merged
+#importo dataset 
 merged <- read.csv2("C:/AURI/Thesis_bagetto/input/merged.csv")
+merged_final_clean <- read.csv2("C:/AURI/Thesis_bagetto/input/merged_final_clean.csv")
 
 # importo i batch 
 batch_sequenziamento <- read_excel("batch_sequenziamento.xlsx")
@@ -96,6 +97,30 @@ merged_final_clean <- merged_final_clean %>%
     EDSS, lesioni, relapse, cortisone,
     everything()
   )
+
+class(merged_final_clean$gc_treatment)
+merged_final_clean <- merged_final_clean %>%
+  mutate(
+    gc_treatment = case_when(
+      gc_treatment == "positive" ~ "1",
+      gc_treatment == "negative" ~ "0",
+      TRUE ~ NA_character_
+    ),
+    gc_treatment = factor(gc_treatment, levels = c("0", "1"))
+  )
+
+merged_final_clean <- merged_final_clean %>%
+  mutate(
+    lesion_burden = factor(lesion_burden)
+  )
+
+class(merged_final_clean$lesion_burden)
+
+merged_final_clean <- merged_final_clean %>%
+  distinct()
+
+merged_final_clean <- merged_final_clean %>%
+  filter(!(ID_long == "TEC19T12" & duplicated(ID_long)))
 
 
 # salvo
