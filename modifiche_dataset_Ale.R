@@ -156,6 +156,7 @@ merged$relapse_T12[merged$ID== "TEC24"] <- 1
 
 merged$EDSS_T6[merged$ID== "TEC25"] <- 1.5
 merged$EDSS_T18[merged$ID== "TEC25"] <- 1.5
+merged$data_cambio_terapia[merged$ID == "TEC25"] <- as.Date("2021-09-01")
 
 merged$EDSS_T6[merged$ID== "TEC26"] <- 2
 merged$lesioni_T6[merged$ID== "TEC26"] <- 0
@@ -418,8 +419,12 @@ merged$lesioni_T30[merged$ID== "TEC03"] <- 0
 merged$relapse_T30[merged$ID== "TEC03"] <- 0
 merged$cortisone_T30[merged$ID== "TEC03"] <- 0
 
+# age at T0 mancanti
+merged$age_at_T0[merged$ID == "TEC30"] <- 19
+merged$age_at_T0[merged$ID == "TEC31"] <- 55
 
-
+merged_final_clean <- read_csv2("input/merged_final_clean.csv")
+View(merged_final_clean)
 
 
 #SALVO MODIFICHE
@@ -434,10 +439,32 @@ write.csv2(merged_final_clean,
            row.names = FALSE, 
            fileEncoding = "UTF-8")
 
+write.csv2(merged_ceci,
+           "C:/AURI/Thesis_bagetto/input/merged_ceci.csv",
+           row.names = FALSE, 
+           fileEncoding = "UTF-8")
+
+
+
+View(merged_final_clean)
+merged_final_clean <-read.csv2("C:/AURI/Thesis_bagetto/input/merged_final_clean.csv")
+
+merged <- merged %>%
+  mutate(
+    naive = ifelse(ID == "TEC23", "yes", naive)
+  )
+
+merged_final_clean <- merged_final_clean %>%
+  mutate(
+    naive = ifelse(ID == "TEC23", "yes", naive)
+  )
+
+
 # APRO MERGED
 merged <- read.csv2("C:/AURI/Thesis_bagetto/input/merged.csv")
+merged_ceci <- read.csv2("C:/AURI/Thesis_bagetto/input/merged_ceci.csv")
 
 # MERGED DI CECI MAV+TEC
-merged_ceci <- read.csv2("C:/AURI/Thesis_bagetto/input/merged_ceci (2).csv")
-
+merged_ceci <- read.csv2("C:/AURI/Thesis_bagetto/input/merged_ceci.csv")
+View(merged_ceci)
 
