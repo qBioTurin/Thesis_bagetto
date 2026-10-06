@@ -1,0 +1,10 @@
+# Linux-specific docker-compose overrides
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.override.linux.yml up -d
+
+services:
+  app:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /run/media:/run/media:ro
+      - /mnt:/mnt:ro
+      - /media:/media:ro

@@ -1,0 +1,206 @@
+Methods
+Below, each script’s methodology is described in detail, highlighting the scientific approach and rationale:
+
+1. Bivar_functs.R
+This script employs the ggplot2 package to construct bivariate barplots, enabling the visualization of relationships between two categorical variables. It supports both stacked and dodged barplot layouts, allowing for the exploration of interactions and distributions within metadata. The functions are designed to be flexible, accepting dynamic variable names and custom color palettes, and are essential for comparative studies where group-wise differences are of interest.
+
+2. DASLefse.R
+The DASLefse.R script automates the preparation and execution of LEfSe analysis, a method for high-dimensional biomarker discovery and explanation. It processes decontaminated phyloseq objects and metadata, formats them for LEfSe, and runs the analysis in a Docker container to ensure reproducibility. The method leverages linear discriminant analysis to identify features most likely to explain differences between classes, supporting robust biomarker discovery in microbiome studies.
+
+3. DASLimma.R
+This script implements the LIMMA (Linear Models for Microarray Data) methodology for differential abundance analysis. It extracts and normalizes abundance data, constructs a design matrix based on experimental groups, and fits linear models to identify significantly different features. The approach is statistically rigorous, controlling for multiple testing and covariates, and is widely used in omics data analysis for its power and flexibility.
+
+4. DasMerge.R
+DasMerge.R merges the results of LEfSe and LIMMA analyses to create a unified set of significant taxa. The script ensures that all unique features identified by either method are retained, and prunes the phyloseq object accordingly. This integrative approach maximizes sensitivity and ensures that downstream analyses are based on the most comprehensive set of biologically relevant features.
+
+5. GraphAlpha.R
+GraphAlpha.R uses ggplot2 to visualize alpha diversity indices, such as Shannon or Simpson, across experimental groups. The script includes statistical annotation for two-group comparisons, using non-parametric tests to assess significance. This method provides an intuitive and statistically sound way to compare within-sample diversity, a key metric in ecological and microbiome studies.
+
+6. GraphBeta.R
+This script generates Principal Coordinates Analysis (PCoA) plots based on Bray-Curtis distances, a standard approach for visualizing beta diversity. By mapping samples in reduced-dimensional space and coloring by metadata, the method reveals patterns of community structure and group separation. The addition of ellipses and custom palettes enhances interpretability and publication quality.
+
+7. GraphHeatmap.R
+GraphHeatmap.R creates annotated heatmaps of normalized and z-scored abundance data, integrating both taxonomic and sample metadata. The method uses hierarchical clustering and color gradients to reveal patterns of abundance and co-occurrence, supporting the identification of key taxa and sample groupings. The script leverages pheatmap and ggplot2 for flexible, high-quality visualization.
+
+8. GraphStackedBar.R
+This script constructs stacked barplots of relative abundance at user-defined taxonomic levels, using aggregation and binning to manage complexity. The method highlights the composition of microbial communities and allows for comparison across groups or conditions. Faceting and custom color schemes facilitate the exploration of trends and outliers in community structure.
+
+9. KrakenDataImport.R
+KrakenDataImport.R imports BIOM and metadata files, constructs phyloseq objects, and assigns taxonomy and phylogenetic trees. The method ensures that data are properly formatted and annotated for downstream analysis, and supports domain-specific subsetting. The use of random phylogenetic trees enables compatibility with diversity metrics that require tree information.
+
+10. KrakenDeSeq.R
+This script applies the DESeq2 methodology for differential abundance analysis, normalizing count data and identifying unique taxa at specified levels. The method is robust to differences in sequencing depth and compositionality, and is widely regarded as a gold standard for count-based omics data. The script outputs processed phyloseq objects for each domain, supporting targeted analyses.
+
+11. MetaRdsCreator.R
+MetaRdsCreator.R processes MetaPhlAn output and metadata, merges taxonomy with NCBI taxids, and reconstructs phyloseq objects. The method includes reweighting and filtering steps to address artifacts and ensure accurate taxonomic annotation. The script supports supervised decontamination and taxonomic filtering, enhancing data quality and interpretability.
+
+12. MetaSearchTaxid.R
+This script cleans and merges taxid information from MetaPhlAn outputs, handling missing or malformed entries and deduplicating data. The method ensures that taxonomic identifiers are accurate and consistent, which is critical for downstream mapping, annotation, and integration with external databases.
+
+13. MetaphlanDataImportDecontam.R
+MetaphlanDataImportDecontam.R imports and preprocesses MetaPhlAn abundance tables and metadata, applying threshold filtering to remove low-abundance and zero-abundance features. The method splits data by domain and saves filtered tables, preparing them for decontamination and further analysis. This approach improves data quality and analytical sensitivity.
+
+14. Packages.R
+Packages.R manages package dependencies, ensuring that all required libraries are installed and loaded. The method distinguishes between CRAN, Bioconductor, and GitHub packages, and provides installation functions for each. This script is essential for reproducibility and portability of the workflow.
+
+15. RunApp.R
+RunApp.R contains the logic to launch the Shiny application, sourcing UI and server components and setting application options. The method ensures that the application is initialized with the correct configuration and resources, supporting a seamless user experience.
+
+16. Server.R
+Server.R implements the backend logic for the Shiny application, managing reactivity, file uploads, data processing, and user interactions. The method leverages Shiny’s reactive programming model to provide a dynamic and responsive interface, orchestrating the entire analytical workflow.
+
+17. SupervisedDecontam.R
+This script performs supervised decontamination on phyloseq objects, filtering taxa based on user-selected lists and taxonomic levels. The method calculates alpha diversity metrics and removes strain-level information as needed, supporting high-quality, contamination-aware analyses. The approach is tailored for both Kraken and MetaPhlAn pipelines.
+
+18. UI.R
+UI.R defines the user interface for the Shiny application, using fluidPage, navbarPage, and dynamic panels to create an intuitive and interactive environment. The method supports file uploads, manual adjustments, and navigation, making advanced analyses accessible to users with varying expertise.
+
+19. Univar_functs.R
+Univar_functs.R provides functions for univariate visualization, including barplots, pie charts, and waffle plots. The method supports flexible plotting of single categorical variables, enabling the exploration of metadata distributions and sample characteristics.
+
+20. function.R
+function.R contains the main function for processing BIOM and metadata files, performing decontamination, and converting data to phyloseq objects. The method integrates core steps of the Kraken pipeline, supporting automated and reproducible data processing.
+
+21. removeStrain.R
+removeStrain.R processes phyloseq objects to remove strain-level taxonomy, clean species names, and prune taxa not reaching the species level. The method ensures taxonomic consistency and prepares data for downstream analysis, reducing noise and improving interpretability.
+
+22. utilities.R
+utilities.R provides utility functions for folder creation, species extraction, and manual selection of taxa. The methods support data curation, reproducibility, and workflow automation, and include curated lists of human-associated phyla and species for reference.
+Title: Comprehensive Project Description – AppWorkflow
+
+Introduction and Scientific Context
+AppWorkflow is a modular, extensible platform designed for the advanced analysis of omics data, with a particular focus on metagenomic datasets and their associated metadata. The project is structured to support the entire analytical pipeline, from raw data import and preprocessing to statistical analysis, visualization, and result export. AppWorkflow is intended for use in academic and research settings, enabling reproducible, transparent, and customizable workflows for microbiome and metagenomic studies. The platform leverages the R programming language and the Shiny web application framework to provide both robust backend analytics and an interactive user interface.
+
+Project Structure and Organization
+The project directory is organized to facilitate clarity, modularity, and ease of extension:
+
+- R/: Contains the core R scripts implementing the main analytical functions. Each script is dedicated to a specific aspect of the workflow, such as univariate and bivariate analysis, data import, decontamination, and visualization.
+- inst/Shiny/: Houses the main Shiny application (app.R), which orchestrates the loading of all dependencies and launches the user interface and server logic.
+- input/: Stores all input data files, including metadata tables, biom files, filtered and reduced datasets, and intermediate results. This folder is designed to accommodate a wide range of data formats commonly used in metagenomics.
+- Image/Heatmap/: Dedicated to the storage of graphical outputs, particularly heatmaps generated during the analysis. This separation ensures that results are organized and easily accessible for reporting and publication.
+- ShinyMirriTemplate/: Contains graphical templates, logos, and style sheets used to customize the appearance of the Shiny application, ensuring visual consistency and branding.
+- Configuration and metadata files: Files such as DESCRIPTION, NAMESPACE, baselines_metadata.tsv, and metadata_used.csv provide essential metadata, package dependencies, and documentation for the project.
+
+Key Functionalities and Workflow
+AppWorkflow implements a comprehensive pipeline for metagenomic data analysis, which can be summarized in the following stages:
+
+1. Data Import and Preprocessing
+   - The platform supports the import of data from multiple sources, including Kraken and Metaphlan outputs, as well as standard biom and CSV formats.
+   - Preprocessing steps include normalization, filtering, and transformation of raw data to ensure compatibility with downstream analyses.
+   - Dedicated scripts handle the parsing and integration of metadata, enabling complex experimental designs and covariate analyses.
+
+2. Statistical Analysis
+   - Univariate and bivariate statistical methods are implemented to explore relationships within the data, identify significant features, and test hypotheses.
+   - Diversity analysis modules compute alpha and beta diversity indices, providing insights into community structure and variation.
+   - Differential abundance analysis is performed using established methods such as Limma and Lefse, allowing for the identification of taxa or features associated with experimental conditions.
+
+3. Decontamination
+   - The workflow includes both supervised and unsupervised decontamination procedures to identify and remove potential contaminants from the dataset.
+   - These methods enhance the reliability and validity of downstream analyses, particularly in low-biomass or contamination-prone samples.
+
+4. Visualization
+   - A suite of visualization tools is provided, including interactive heatmaps, stacked bar plots, and boxplots, all accessible through the Shiny interface.
+   - Custom color palettes and graphical themes ensure that visual outputs are publication-ready and can be tailored to specific requirements.
+
+5. Result Export
+   - Analytical results, including tables and figures, can be exported in standard formats for inclusion in manuscripts, presentations, or further analysis.
+   - The organization of output files facilitates traceability and reproducibility.
+
+Core Components and Scripts
+- app.R: The entry point for the Shiny application, responsible for loading all required scripts and initializing the user interface and server logic.
+- R/GraphAlpha.R, R/GraphBeta.R, R/GraphStackedBar.R, R/GraphHeatmap.R: Scripts dedicated to the generation of specific types of plots and visualizations.
+- R/DASLimma.R, R/DASLefse.R: Implementations of differential abundance analysis using Limma and Lefse methodologies.
+- R/Univar_functs.R, R/Bivar_functs.R: Contain functions for univariate and bivariate statistical analyses.
+- R/MetaphlanDataImportDecontam.R, R/KrakenDataImport.R: Scripts for importing and preprocessing data from Metaphlan and Kraken pipelines.
+- R/SupervisedDecontam.R: Implements supervised decontamination strategies.
+- ShinyMirriTemplate/: Provides HTML templates, CSS styles, and branding assets for the user interface.
+
+Reproducibility and Extensibility
+AppWorkflow is designed with reproducibility as a core principle. All analytical steps are scripted and documented, ensuring that analyses can be repeated and audited. The modular structure allows researchers to extend the platform by adding new scripts or modifying existing ones without disrupting the overall workflow. The use of standard data formats and clear separation of input, processing, and output stages further enhances reproducibility.
+
+User Experience and Interface
+The Shiny-based interface provides an accessible, interactive environment for users of varying expertise. Users can upload data, configure analyses, visualize results, and export outputs without requiring advanced programming skills. The interface is customizable, supporting institutional branding and theming through the ShinyMirriTemplate assets.
+
+Scientific Impact and Applications
+AppWorkflow addresses key challenges in metagenomic data analysis, including data heterogeneity, contamination, and the need for reproducible, transparent workflows. Its comprehensive feature set makes it suitable for a wide range of applications, from exploratory data analysis to hypothesis-driven research. The platform is particularly valuable for studies involving complex experimental designs, longitudinal sampling, or multi-omics integration.
+
+Best Practices and Recommendations
+- Ensure that all input data are properly formatted and accompanied by complete metadata.
+- Leverage the decontamination modules to improve data quality, especially in studies with low-biomass samples.
+- Use the visualization tools to explore data interactively and identify patterns or outliers prior to formal statistical testing.
+- Document all analysis steps and parameter choices to facilitate reproducibility and peer review.
+
+Conclusion
+AppWorkflow is a robust, flexible, and user-friendly platform for metagenomic data analysis. Its modular design, comprehensive functionality, and emphasis on reproducibility make it an ideal tool for scientific research and publication. The platform can be readily adapted to new analytical challenges and integrated into broader bioinformatics pipelines, supporting the advancement of microbiome science and related fields.
+
+
+Detailed Description of R Scripts
+Below is a detailed description of each script in the R/ directory, outlining its purpose, main functions, and role within the AppWorkflow pipeline:
+
+1. Bivar_functs.R
+   Implements bivariate plotting functions, mainly for generating barplots with two categorical variables. It provides logic for stacked and dodged barplots, supporting flexible visualization of relationships between metadata variables.
+
+2. DASLefse.R
+   Prepares and executes LEfSe (Linear Discriminant Analysis Effect Size) analysis for differential abundance, using Docker for reproducibility. It formats input data, subsets samples, and runs the LEfSe pipeline, returning significant features for downstream analysis.
+
+3. DASLimma.R
+   Runs differential abundance analysis using the LIMMA pipeline. It extracts, normalizes, and log-transforms genus-level data, constructs a design matrix, and identifies significantly differentially abundant features, saving results for visualization.
+
+4. DasMerge.R
+   Merges results from LEfSe and LIMMA analyses, retaining all unique significant taxa. It prunes and filters a phyloseq object accordingly, ensuring that downstream analyses use a comprehensive set of significant features.
+
+5. GraphAlpha.R
+   Generates boxplots of alpha diversity indices grouped by metadata variables. It includes statistical annotation for two-group comparisons and produces publication-ready plots for diversity analysis.
+
+6. GraphBeta.R
+   Produces PCoA plots (Principal Coordinates Analysis) of beta diversity using Bray-Curtis distances. The function colors samples by metadata and adds ellipses to visualize group dispersion, supporting community structure analysis.
+
+7. GraphHeatmap.R
+   Creates annotated heatmaps of normalized and z-scored abundances at the Genus-Species level. It integrates sample and taxonomic annotations, saves plots as PDFs, and returns ggplot objects for further customization.
+
+8. GraphStackedBar.R
+   Generates stacked barplots of relative abundance at user-specified taxonomic levels. It supports binning, aggregation, and faceting by metadata, providing a clear overview of community composition.
+
+9. KrakenDataImport.R
+   Imports BIOM and metadata files, constructs phyloseq objects, assigns taxonomy, and builds random phylogenetic trees. It saves domain-specific RDS files for Bacteria, Archaea, and Eukaryota, enabling domain-focused analyses.
+
+10. KrakenDeSeq.R
+   Performs DESeq2-based differential abundance analysis on decontaminated phyloseq data. It normalizes counts, subsets by kingdom, and extracts unique taxa at specified levels, saving processed objects for further study.
+
+11. MetaRdsCreator.R
+   Imports MetaPhlAn data and metadata, merges taxonomy with NCBI taxids, and reconstructs phyloseq objects. It saves domain-specific RDS files and returns taxonomic identifiers for supervised decontamination.
+
+12. MetaSearchTaxid.R
+   Cleans and merges taxid information from MetaPhlAn output files. It handles missing or malformed taxids, deduplicates entries, and saves a unified taxid file for downstream mapping and annotation.
+
+13. MetaphlanDataImportDecontam.R
+   Imports and preprocesses MetaPhlAn abundance tables and metadata, applies threshold filtering, and saves filtered tables split by domain. It prepares data for decontamination and further analysis.
+
+14. Packages.R
+   Manages package dependencies for the workflow. It defines required CRAN, Bioconductor, and GitHub packages, and provides functions to install missing packages, ensuring a reproducible environment.
+
+15. RunApp.R
+   Contains the function to launch the MicroWorkflow Shiny application, sourcing UI and server components and setting application options.
+
+16. Server.R
+   Implements the server logic for the Shiny application. It manages reactivity, file uploads, data processing, and user interactions, orchestrating the backend of the interactive workflow.
+
+17. SupervisedDecontam.R
+   Performs supervised decontamination on phyloseq objects for Bacteria, Archaea, and Eukaryota. It filters taxa, calculates alpha diversity, and saves results, supporting high-quality, contamination-aware analyses.
+
+18. UI.R
+   Defines the user interface for the Shiny application, including file upload widgets, navigation, and dynamic panels. It provides a user-friendly, interactive environment for configuring and running analyses.
+
+19. Univar_functs.R
+   Implements univariate plotting functions, such as barplots, pie charts, and waffle plots, for single categorical variables. It supports flexible and informative visualization of metadata distributions.
+
+20. function.R
+   Contains the main function for processing BIOM and metadata files, performing decontamination, and converting data to phyloseq objects. It integrates core steps of the Kraken pipeline.
+
+21. removeStrain.R
+   Processes phyloseq objects to remove strain-level taxonomy, clean species names, and prune taxa not reaching the species level. It ensures taxonomic consistency and prepares data for downstream analysis.
+
+22. utilities.R
+   Provides utility functions for folder creation, species extraction, and manual selection of taxa. It includes curated lists of human-associated phyla and species, supporting data curation and reproducibility.
+
+This detailed breakdown clarifies the role of each script and how they collectively support the modular, extensible, and reproducible design of AppWorkflow.

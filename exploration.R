@@ -1554,3 +1554,10 @@ cor.test(
   method = "spearman", exact= FALSE
 )
 
+merged <- read.csv("C:/AURI/Thesis_bagetto/input/merged.csv")
+view(merged)
+
+
+merged <- read.csv("C:/AURI/Thesis_bagetto/input/merged.csv")
+merged <- read.csv2("C:/AURI/Thesis_bagetto/input/merged.csv")
+View(merged)

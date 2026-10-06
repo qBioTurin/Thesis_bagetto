@@ -1,0 +1,16 @@
+.git
+.gitignore
+.vscode
+.Rproj.user
+.Rhistory
+.RData
+.DS_Store
+input.tar.xz
+*.tar
+*.tar.gz
+*.zip
+R/preprocess_pipeline/Python-*.tar.xz
+renv/library/
+__pycache__
+*.pyc
+.pytest_cache

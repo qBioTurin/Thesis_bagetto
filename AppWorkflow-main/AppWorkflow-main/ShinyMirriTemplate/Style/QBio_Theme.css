@@ -1,0 +1,816 @@
+/* ============================================================
+   QBio Shiny Theme — v3
+   ONLY two colours + their tints/shades:
+     Amber  #E19243  (warm brand)
+     Forest #284639  (cool brand)
+
+   Tints derived mathematically:
+   --amber-dark   mix(amber, black 20%)   → #B8712A
+   --amber-mid    mix(amber, white 35%)   → #EDBA8E
+   --amber-light  mix(amber, white 70%)   → #F7DFC4
+   --amber-pale   mix(amber, white 88%)   → #FBF0E4
+   --forest-dark  mix(forest, black 20%)  → #1A2E25
+   --forest-mid   mix(forest, white 35%)  → #6A9080
+   --forest-light mix(forest, white 70%)  → #A8C4BB
+   --forest-pale  mix(forest, white 88%)  → #D8E8E3
+   --text-dark    mix(forest, black 55%)  → #111D17  (near-black)
+   --text-mid     mix(forest, black 25%)  → #1E3329
+   ============================================================ */
+
+/* ---- 1. Variables ---- */
+:root {  
+  
+  --footer: #3f4643;
+  --lightpurple: #ECE3EC;
+  --header: #FCF5D3;
+  --background:     #ECE9EA;
+  --amber:          #E19243;
+  --amber-dark:     #B8712A;
+  --amber-mid:      #EDBA8E;
+  --amber-light:    #F7DFC4;
+  --amber-pale:     #FBF0E4;
+
+  --forest:         #284639;
+  --forest-dark:    #1A2E25;
+  --forest-mid:     #6A9080;
+  --forest-light:   #A8C4BB;
+  --forest-pale:    #D8E8E3;
+
+  --text-dark:      #111D17;
+  --text-mid:       #1E3329;
+  --text-on-amber:  #111D17;
+  --text-on-forest: #FBF0E4;
+  --white:          #FFFFFF;
+
+  /* Legacy aliases */
+  --purple:         #284639;
+  --lightpurple:    rgba(40,70,57,0.18);
+  --lightgreen:     #E19243;
+  --green:          #1A2E25;
+  --light:          #D8E8E3;
+  --dark:           #111D17;
+  --orange:         #E19243;
+
+  /* Typography */
+  --fonttitle:  "Merriweather Sans", "Martel Sans", sans-serif;
+  --fontlabel:  "Martel Sans", sans-serif;
+  --fonttext:   "Martel Sans", sans-serif;
+
+  /* Shape */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --shadow-sm:  0 2px 8px rgba(26,46,37,0.10);
+  --shadow-md:  0 4px 16px rgba(26,46,37,0.14);
+
+  /* Nav button — uniform size */
+  --nav-btn-w:    140px;
+  --nav-btn-h:    44px;
+  --nav-btn-fs:   0.82em;
+
+  /* Page */
+  --page-max:   90%;
+}
+
+/* ---- 2. Reset ---- */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ---- 3. Body & page background ---- */
+body,
+html {
+  font-family: var(--fonttext);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--text-dark);
+  background-color: var(--background);
+  margin: 0; padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* All Bootstrap containers inherit the page bg */
+.container-fluid,
+.container {
+  background-color: transparent;
+  width: 100%;
+  margin: 0; padding: 0;
+}
+
+/* ---- 4. Typography ---- */
+h1 {
+  font-family: var(--fonttitle);
+  font-weight: 700; font-size: 2em;
+  color: var(--forest);
+  margin: 0 0 12px 0;
+}
+h2 {
+  font-family: var(--fonttitle);
+  font-weight: 600; font-size: 1.5em;
+  color: var(--forest);
+}
+h3, h4 {
+  font-family: var(--fontlabel);
+  font-weight: 600; font-size: 1em;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+h5, h6 {
+  font-family: var(--fontlabel);
+  font-weight: 400; font-size: 0.87em;
+  line-height: 1.65;
+  color: var(--forest);
+}
+p {
+  font-family: var(--fonttext);
+  font-weight: 400; font-size: 0.92em;
+  color: var(--text-dark);
+}
+
+/* ---- 5. App shell ---- */
+.app-shell {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  background-color: var(--background);
+}
+.app-shell > .container-fluid { flex: 1 0 auto; }
+.app-shell .footerMirri { margin-top: auto; }
+
+/* ---- 6. Header ---- */
+.headerMirri {
+  background-color: var(--lightpurple);
+  border-bottom: 1px solid var(--lightpurple);
+  width: 100%; height: 5em;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 5%;
+  box-shadow: 0 3px 14px rgba(26,46,37,0.22);
+  margin-bottom: 0;
+  position: relative; overflow: hidden;
+}
+.headerMirri img { height: 3em; padding: 4px 0; }
+
+/* ---- 7. Navbar strip ---- */
+.navbar,
+.navbar-default {
+  background-color: var(--background) !important;
+  border: none !important;
+  border-bottom: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  margin-bottom: 0 !important;
+  padding: 10px 5% 8px !important;
+}
+
+/* Kill every default gap around and between header → navbar → content */
+.headerMirri + * { margin-top: 0 !important; }
+
+.navbar-default + .tab-content,
+.navbar + .tab-content,
+.shiny-tab-content,
+.tab-content {
+  margin-top: 0 !important;
+}
+
+/* navbarPage wraps everything in a container-fluid that can
+   carry Bootstrap's default top-padding */
+.navbar-default ~ .container-fluid,
+.navbar ~ .container-fluid {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.navbar-default .container-fluid {
+  background-color: transparent !important;
+  max-width: var(--page-max);
+  margin: 0 auto; padding: 0;
+}
+
+/* Nascondi solo il brand text, NON il navbar-header
+   (che contiene il pulsante hamburger Bootstrap) */
+.navbar-brand { display: none !important; }
+
+/* Hamburger toggle — stilizzato con i colori del tema */
+.navbar-default .navbar-toggle {
+  border-color: var(--forest) !important;
+  background-color: transparent !important;
+  margin: 6px 0 !important;
+  padding: 8px 10px !important;
+  border-radius: var(--radius-sm) !important;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: var(--amber) !important;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: var(--forest) !important;
+  width: 22px !important;
+  height: 3px !important;
+  border-radius: 2px !important;
+}
+.navbar-default .navbar-toggle:hover .icon-bar,
+.navbar-default .navbar-toggle:focus .icon-bar {
+  background-color: var(--forest-dark) !important;
+}
+
+/* ---- Menu espanso (≥768px) — bottoni uniformi in riga ---- */
+@media (min-width: 768px) {
+  .navbar-header { display: none !important; }
+
+  .navbar-default .navbar-nav,
+  .navbar-nav {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none;
+    width: 100% !important;
+  }
+
+  .navbar-default .navbar-nav > li,
+  .navbar-nav > li {
+    float: none !important;
+    flex: 0 0 auto !important;
+  }
+
+  .navbar-default .navbar-nav > li > a,
+  .navbar-nav > li > a {
+    /* Dimensione uniforme su desktop */
+    width:       var(--nav-btn-w) !important;
+    height:      var(--nav-btn-h) !important;
+    padding:     0 6px !important;
+    line-height: 1.2 !important;
+    display:         flex !important;
+    align-items:     center !important;
+    justify-content: center !important;
+    text-align:      center !important;
+    white-space:     normal !important;
+    overflow:        hidden;
+  }
+}
+
+/* ---- Menu collassato (<768px) — lista verticale nel dropdown ---- */
+@media (max-width: 767px) {
+  .navbar-default .navbar-collapse {
+    background-color: var(--forest-pale) !important;
+    border-top: 2px solid var(--forest-light) !important;
+    padding: 8px 4px !important;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .navbar-default .navbar-nav,
+  .navbar-nav {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+  }
+
+  .navbar-default .navbar-nav > li,
+  .navbar-nav > li {
+    float: none !important;
+    width: 100% !important;
+  }
+
+  .navbar-default .navbar-nav > li > a,
+  .navbar-nav > li > a {
+    /* Su mobile: larghezza piena, altezza auto */
+    width:       100% !important;
+    height:      auto !important;
+    min-height:  44px !important;
+    padding:     10px 16px !important;
+    line-height: 1.4 !important;
+    display:         flex !important;
+    align-items:     center !important;
+    justify-content: flex-start !important;
+    text-align:      left !important;
+    white-space:     normal !important;
+    border-radius:   var(--radius-sm) !important;
+    margin:          3px 0 !important;
+  }
+}
+
+/* Stile base dei link (colori, font) — vale sempre */
+.navbar-default .navbar-nav > li > a,
+.navbar-nav > li > a {
+  font-family: var(--fontlabel) !important;
+  font-weight: 700 !important;
+  font-size: var(--nav-btn-fs) !important;
+  color: var(--forest-pale) !important;
+  background-color: var(--forest-mid) !important;
+  border: 2px solid transparent !important;
+  border-radius: var(--radius-md) !important;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease !important;
+}
+
+/* Keep <br> in nav labels visible for multi-line tab titles */
+
+/* Active */
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-nav > .active > a:hover {
+  background-color: var(--amber) !important;
+  color: var(--text-dark) !important;
+  border-color: var(--amber-dark) !important;
+}
+
+/* Hover */
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus {
+  background-color: var(--amber-light) !important;
+  color: var(--text-dark) !important;
+  border-color: var(--amber-mid) !important;
+}
+
+/* Locked */
+.navbar-nav > li.tab-locked > a {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ---- 8. Inner pills (Graphs / Humann sub-tabs) ---- */
+.nav-pills {
+  display: flex; flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px; padding: 0;
+  list-style: none;
+}
+
+.nav-pills > li > a {
+  font-family: var(--fontlabel) !important;
+  font-weight: 700; font-size: 0.9em;
+  color: var(--forest) !important;
+  background-color: var(--forest-pale) !important;
+  border: 2px solid var(--forest-light) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 8px 26px !important;
+  transition: all 0.18s ease;
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover {
+  background-color: var(--amber) !important;
+  color: var(--text-dark) !important;
+  border-color: var(--amber-dark) !important;
+}
+
+.nav-pills > li > a:hover {
+  background-color: var(--amber-light) !important;
+  color: var(--text-dark) !important;
+  border-color: var(--amber) !important;
+}
+
+#topic_modeling_content .nav-pills,
+#humann_graphs_content .nav-pills {
+  justify-content: flex-start;
+}
+
+#topic_modeling_content .tab-content,
+#humann_graphs_content .tab-content,
+#humann_processing_content {
+  text-align: left;
+}
+
+/* ---- 9. Content area ---- */
+.tab-content {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 28px 0;
+}
+
+.container-fluid > .row,
+.tab-content > .row {
+  max-width: var(--page-max);
+  margin: 0 auto;
+}
+
+/* ---- 10. Cards ---- */
+.card,
+.custom-card {
+  background-color: var(--forest-pale);
+  border: 1px solid var(--forest-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 22px;
+  margin-bottom: 22px;
+}
+
+.card-header {
+  font-family: var(--fontlabel);
+  font-weight: 700; font-size: 0.9em;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-on-forest);
+  background-color: var(--forest);
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  margin-bottom: 18px; border: none;
+}
+
+/* ---- 11. Well ---- */
+.well {
+  background-color: var(--amber-pale);
+  border: 1px solid var(--amber-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 18px;
+  margin: 0 0 16px 0;
+  width: 100%;
+}
+
+/* ---- 11b. VirtualSelect dropdown overflow fix ----
+   card-body/card/well clip the absolute-positioned dropbox; allow it to escape
+   only in containers that actually hold a vscomp widget. ---- */
+.card-body:has(.vscomp-wrapper),
+.card:has(.vscomp-wrapper),
+.bslib-card:has(.vscomp-wrapper),
+.well:has(.vscomp-wrapper),
+.tab-pane:has(.vscomp-wrapper) {
+  overflow: visible !important;
+}
+.vscomp-dropbox-container {
+  z-index: 9999 !important;
+}
+
+/* ---- 12. Action / download buttons ---- */
+button,
+.btn,
+.action-button,
+.shiny-bound-input.action-button,
+.shiny-bound-input.btn,
+.shiny-download-link,
+.btn-default,
+.btn-primary,
+.btn-secondary,
+input[type="button"],
+input[type="submit"] {
+  font-family: var(--fontlabel) !important;
+  font-weight: 700 !important;
+  font-size: 0.875em !important;
+  color: var(--text-dark) !important;
+  background-color: var(--amber) !important;
+  border: 2px solid var(--amber-dark) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 9px 22px !important;
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.12s ease !important;
+  box-shadow: none !important;
+  text-transform: none !important;
+}
+
+button:hover,
+.btn:hover,
+.action-button:hover,
+.shiny-download-link:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+  background-color: var(--amber-dark) !important;
+  color: var(--amber-pale) !important;
+  transform: translateY(-1px) !important;
+}
+
+button:active,
+.btn:active,
+.action-button:active,
+input[type="button"]:active,
+input[type="submit"]:active {
+  background-color: var(--forest) !important;
+  color: var(--text-on-forest) !important;
+  transform: translateY(0) scale(0.98) !important;
+}
+
+/* Download — forest variant */
+.shiny-download-button,
+.download-btn,
+button.download-btn {
+  background-color: var(--forest) !important;
+  color: var(--text-on-forest) !important;
+  border-color: var(--forest-dark) !important;
+}
+.shiny-download-button:hover,
+.download-btn:hover {
+  background-color: var(--forest-dark) !important;
+}
+
+/* Refined button */
+.refined-button,
+button.refined-button,
+a.refined-button,
+.refined-button.btn,
+.refined-button.action-button {
+  max-width: 240px !important;
+  width: 100% !important;
+  display: inline-block !important;
+  margin: 8px auto !important;
+}
+
+/* ---- 13. Form inputs ---- */
+.shiny-input-container input[type="text"],
+.shiny-input-container input[type="number"],
+.shiny-input-container input[type="password"],
+.shiny-input-container select,
+.shiny-input-container textarea {
+  font-family: var(--fonttext);
+  font-size: 0.9em;
+  color: var(--text-dark);
+  background-color: var(--amber-pale);
+  border: 1px solid var(--amber-mid);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.shiny-input-container input:focus,
+.shiny-input-container select:focus,
+.shiny-input-container textarea:focus {
+  border-color: var(--forest);
+  outline: 2px solid var(--forest-pale);
+}
+
+.shiny-input-container label,
+.control-label {
+  font-family: var(--fontlabel);
+  font-weight: 600; font-size: 0.85em;
+  color: var(--forest);
+  margin-bottom: 4px;
+}
+
+/* Slider */
+.irs--shiny .irs-bar,
+.irs--shiny .irs-from,
+.irs--shiny .irs-to,
+.irs--shiny .irs-single {
+  background-color: var(--amber) !important;
+  color: var(--text-dark) !important;
+}
+.irs--shiny .irs-handle { border-color: var(--amber-dark) !important; }
+.irs--shiny .irs-line { background: var(--forest-pale) !important; }
+
+/* Checkbox / radio */
+.shiny-input-container .radio label,
+.shiny-input-container .checkbox label {
+  font-family: var(--fonttext); font-size: 0.9em; font-weight: 400;
+  color: var(--text-dark);
+}
+
+/* Pretty checkbox */
+.dropdown-menu > .active > a { background-color: var(--amber); }
+.pretty input:checked ~ .state.p-primary label::after,
+.pretty.p-toggle .state.p-primary label::after {
+  background-color: var(--amber) !important;
+}
+
+/* Material switch */
+.material-switch input[type="checkbox"]:checked + .lever {
+  background-color: var(--amber-light);
+}
+.material-switch input[type="checkbox"]:checked + .lever::after {
+  background-color: var(--amber);
+}
+
+/* Progress bar */
+.progress-bar {
+  background-color: var(--amber);
+  color: var(--text-dark);
+  transition: width 0.5s ease;
+}
+.progress { background-color: var(--forest-pale); }
+
+/* ---- 14. DataTable ---- */
+.dataTables_wrapper,
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+  background-color: var(--forest-pale);
+  color: var(--text-dark);
+}
+
+.dataTable thead th {
+  background-color: var(--forest);
+  color: var(--text-on-forest);
+  font-family: var(--fontlabel);
+  font-weight: 700; font-size: 0.85em;
+  border-bottom: 2px solid var(--amber);
+}
+
+.dataTable tbody tr { background-color: var(--amber-pale); }
+.dataTable tbody tr:nth-child(even) { background-color: var(--forest-pale); }
+.dataTable tbody tr:hover { background-color: var(--amber-light) !important; }
+
+/* ---- 15. Footer ---- */
+.footerMirri {
+  background-color: var(--footer);
+  width: 100%; min-height: 5em;
+  display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap;
+  padding: 20px 5%;
+  margin-top: 2em;
+  box-shadow: 0 -2px 8px rgba(26,46,37,0.16);
+  color: var(--forest-pale);
+  font-family: var(--fontlabel); font-size: 0.82em;
+  position: relative;
+}
+.footerMirri::before {
+  content: '';
+  display: block; position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--forest-mid), var(--amber), var(--forest-mid));
+}
+.footerMirri h4 {
+  color: var(--amber-mid); font-weight: 700;
+  font-size: 0.9em; margin: 0 0 4px 0;
+}
+.footerMirri h5 {
+  color: var(--forest-light); font-weight: 400;
+  margin: 0; line-height: 1.7;
+}
+
+/* ---- 16. Auth ---- */
+.auth-shell {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 18px; padding: 24px;
+  background-color: var(--forest);
+}
+.auth-shell.app-mode {
+  min-height: auto; display: block;
+  padding: 0; gap: 0;
+  background-color: transparent;
+}
+#app_content { width: 100%; align-self: stretch; }
+#app_content .app-shell { width: 100%; }
+#auth_login_brand { display: flex; justify-content: center; width: 100%; }
+.auth-login-title-img { width: min(82vw, 360px); height: auto; }
+
+.auth-login-panel {
+  background: var(--forest-pale);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 14px 38px rgba(26,46,37,0.22);
+  width: min(92vw, 460px);
+  padding: 22px 22px 18px 22px;
+  text-align: center;
+  border-top: 4px solid var(--amber);
+}
+.auth-login-cat {
+  width: min(74vw, 290px); height: auto;
+  border-radius: var(--radius-md);
+  margin-bottom: 14px;
+}
+
+/* ---- 17. Graphs layout — centred stack ----
+   Scoped ONLY to graphs/heatmaps tab-panes so the
+   pre-process sidebarLayout is NOT touched. */
+#graphs .col-sm-4,
+#heatmaps .col-sm-4 {
+  width: 100% !important;
+  max-width: 540px !important;
+  float: none !important;
+  margin: 0 auto 16px auto !important;
+  text-align: center;
+}
+#graphs .col-sm-8,
+#heatmaps .col-sm-8 {
+  width: 100% !important;
+  max-width: 100% !important;
+  float: none !important;
+  margin: 0 auto !important;
+}
+
+/* ---- 17b. Pre-process — restore Bootstrap sidebarLayout ---- */
+#pre_process .col-sm-3 {
+  width: 25% !important;
+  max-width: none !important;
+  float: left !important;
+  margin: 0 !important;
+  text-align: left;
+  overflow-y: auto;
+  max-height: 82vh;
+}
+#pre_process .col-sm-9 {
+  width: 75% !important;
+  max-width: none !important;
+  float: left !important;
+  margin: 0 !important;
+}
+#pre_process .col-sm-4 {
+  width: 33.333% !important;
+  max-width: none !important;
+  float: left !important;
+  margin: 0 !important;
+  text-align: left;
+  overflow-y: auto;
+  max-height: 82vh;
+}
+#pre_process .col-sm-8 {
+  width: 66.666% !important;
+  max-width: none !important;
+  float: left !important;
+  margin: 0 !important;
+  overflow-x: auto;
+}
+/* clearfix so rows don't collapse */
+#pre_process .row::after {
+  content: ""; display: table; clear: both;
+}
+
+/* ---- 18. Utilities ---- */
+hr {
+  border: none;
+  border-top: 1px solid var(--forest-light);
+  margin: 18px 0;
+}
+
+.shiny-text-output,
+pre.shiny-text-output {
+  background-color: var(--amber-pale);
+  border: 1px solid var(--amber-light);
+  border-radius: var(--radius-sm);
+  font-size: 0.82em; padding: 8px 12px;
+  color: var(--text-dark);
+  font-family: var(--fonttext);
+}
+
+.col-sm-4, .col-sm-8,
+.col-md-2, .col-md-3,
+.col-md-5, .col-md-12 {
+  padding-left: 20px; padding-right: 20px;
+}
+
+/* ---- 19. Responsive ---- */
+@media (max-width: 1200px) {
+  :root { --nav-btn-w: 118px; }
+}
+
+@media (max-width: 992px) {
+  :root { --nav-btn-w: 100px; --nav-btn-h: 42px; }
+  .tab-content { max-width: 96%; }
+  .card, .custom-card { padding: 14px; }
+  .refined-button { max-width: 100% !important; }
+  .row > .col-sm-6,
+  .row > .col-md-6 {
+    flex: 0 0 100%; max-width: 100%;
+    margin-bottom: 18px;
+  }
+}
+
+/* >=768px: bottoni uniformi in riga gestiti sopra.
+   <768px: Bootstrap attiva l hamburger, gestito sopra. */
+@media (max-width: 768px) {
+  :root { --nav-btn-fs: 0.82em; }
+  .navbar, .navbar-default { padding: 6px 4% !important; }
+}
+
+@media (max-width: 576px) {
+  .headerMirri {
+    height: auto; flex-direction: column;
+    align-items: flex-start; padding: 10px 4%; gap: 6px;
+  }
+  h1 { font-size: 1.4em; }
+}
+
+/* ---- 20. Waiter / loading overlay ---- */
+.waiter-overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.waiter-cat-img {
+  max-width: 240px;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+.waiter-message {
+  color: var(--amber-light);
+  font-family: var(--fontlabel);
+  font-size: 1.1em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.waiter-fact {
+  color: rgba(216, 232, 227, 0.88);   /* forest-pale 88% */
+  font-family: var(--fonttext);
+  font-size: 0.82em;
+  font-style: italic;
+  text-align: center;
+  max-width: 320px;
+}
+
+.waiter-fact-label {
+  font-weight: 700;
+  color: var(--amber-mid);
+}
+

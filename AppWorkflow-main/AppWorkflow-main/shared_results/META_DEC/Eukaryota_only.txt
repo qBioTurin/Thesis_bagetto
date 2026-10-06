@@ -1,0 +1,16 @@
+clade_name	UNITOR_008_BALF_10	UNITOR_008_BALF_11	UNITOR_008_BALF_12	UNITOR_008_BALF_1	UNITOR_008_BALF_3	UNITOR_008_BALF_4	UNITOR_008_BALF_5	UNITOR_008_BALF_6	UNITOR_008_BALF_7	UNITOR_008_BALF_8	UNITOR_008_BALF_9	UNITOR_008_CTRL	UNITOR_008_PLASMA_12	UNITOR_008_PLASMA_4	UNITOR_008_PLASMA_8	UNITOR_009_PLASMA_10	UNITOR_009_PLASMA_11	UNITOR_009_PLASMA_1	UNITOR_009_PLASMA_2	UNITOR_009_PLASMA_3	UNITOR_009_PLASMA_5	UNITOR_009_PLASMA_6	UNITOR_009_PLASMA_7	UNITOR_009_PLASMA_9
+1	k__Eukaryota	0	0	0	0	0.09419	0	0	0	0	0	0	0	0.00596	0	0	0	0	0	0	0	0	0	0	0
+2	k__Eukaryota|p__Ascomycota	0	0	0	0	0.09419	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	k__Eukaryota|p__Ascomycota|c__Saccharomycetes	0	0	0	0	0.09419	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	k__Eukaryota|p__Ascomycota|c__Saccharomycetes|o__Saccharomycetales	0	0	0	0	0.09419	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	k__Eukaryota|p__Ascomycota|c__Saccharomycetes|o__Saccharomycetales|f__Saccharomycetaceae	0	0	0	0	0.09419	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	k__Eukaryota|p__Ascomycota|c__Saccharomycetes|o__Saccharomycetales|f__Saccharomycetaceae|g__Saccharomyces	0	0	0	0	0.09419	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	k__Eukaryota|p__Ascomycota|c__Saccharomycetes|o__Saccharomycetales|f__Saccharomycetaceae|g__Saccharomyces|s__Saccharomyces_paradoxus	0	0	0	0	0.09419	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	k__Eukaryota|p__Ascomycota|c__Saccharomycetes|o__Saccharomycetales|f__Saccharomycetaceae|g__Saccharomyces|s__Saccharomyces_paradoxus|t__EUK27291	0	0	0	0	0.09419	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	k__Eukaryota|p__Basidiomycota	0	0	0	0	0	0	0	0	0	0	0	0	0.00596	0	0	0	0	0	0	0	0	0	0	0
+10	k__Eukaryota|p__Basidiomycota|c__Malasseziomycetes	0	0	0	0	0	0	0	0	0	0	0	0	0.00596	0	0	0	0	0	0	0	0	0	0	0
+11	k__Eukaryota|p__Basidiomycota|c__Malasseziomycetes|o__Malasseziales	0	0	0	0	0	0	0	0	0	0	0	0	0.00596	0	0	0	0	0	0	0	0	0	0	0
+12	k__Eukaryota|p__Basidiomycota|c__Malasseziomycetes|o__Malasseziales|f__Malasseziaceae	0	0	0	0	0	0	0	0	0	0	0	0	0.00596	0	0	0	0	0	0	0	0	0	0	0
+13	k__Eukaryota|p__Basidiomycota|c__Malasseziomycetes|o__Malasseziales|f__Malasseziaceae|g__Malassezia	0	0	0	0	0	0	0	0	0	0	0	0	0.00596	0	0	0	0	0	0	0	0	0	0	0
+14	k__Eukaryota|p__Basidiomycota|c__Malasseziomycetes|o__Malasseziales|f__Malasseziaceae|g__Malassezia|s__Malassezia_restricta	0	0	0	0	0	0	0	0	0	0	0	0	0.00596	0	0	0	0	0	0	0	0	0	0	0
+15	k__Eukaryota|p__Basidiomycota|c__Malasseziomycetes|o__Malasseziales|f__Malasseziaceae|g__Malassezia|s__Malassezia_restricta|t__EUK76775	0	0	0	0	0	0	0	0	0	0	0	0	0.00596	0	0	0	0	0	0	0	0	0	0	0

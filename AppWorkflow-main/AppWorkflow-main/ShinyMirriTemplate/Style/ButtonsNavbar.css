@@ -1,0 +1,74 @@
+/* Button Styles */
+button,
+.btn,
+input[type='button'],
+input[type='submit'] {
+    background-color: var(--lightgreen);
+    color: black !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 8px 20px !important;
+    font-size: 14px !important;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+button:hover,
+.btn:hover,
+input[type='button']:hover,
+input[type='submit']:hover {
+    background-color: var(--purple) !important;
+    transform: scale(1.03);
+}
+
+button:active,
+.btn:active,
+input[type='button']:active,
+input[type='submit']:active {
+    background-color: var(--green) !important;
+    transform: scale(0.98);
+}
+
+/* Navbar container */
+.navbar {
+    border-radius: 14px;
+    margin: 10px;
+    padding: 4px 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Tabs */
+.navbar-nav > li > a {
+    border-radius: 10px;
+    margin: 4px 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Active tab */
+.navbar-nav > .active > a,
+.navbar-nav > .active > a:hover {
+    background-color: var(--lightpurple) !important;
+    color: black !important;
+}
+
+/* Hover effect */
+.navbar-nav > li > a:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* Navbar background */
+.navbar-default {
+    background-color: var(--lightpurple) !important;
+    border: none !important;
+    border-radius: 14px;
+}
+
+/* Remove inner white strip */
+.navbar-default .container-fluid {
+    background-color: transparent !important;
+}
+
+/* Tab text color */
+.navbar-default .navbar-nav > li > a {
+    color: black !important;
+}

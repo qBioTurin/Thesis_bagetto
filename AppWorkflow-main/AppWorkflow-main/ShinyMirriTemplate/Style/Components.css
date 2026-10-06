@@ -1,0 +1,58 @@
+/* ---- Bottoni Shiny, Bootstrap e shinyFiles ---- */
+
+button,
+.btn,
+.action-button,
+.shiny-bound-input.action-button,
+.shiny-bound-input.btn,
+.shiny-download-link,
+.shiny-download-button,
+.shiny-input-container button,
+.btn-default,
+.btn-primary,
+.btn-secondary,
+button.btn,
+input[type="button"],
+input[type="submit"] {
+    background-color: var(--lightgreen) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 8px 20px !important;
+    font-size: 14px !important;
+    box-shadow: none !important;
+}
+
+/* Hover */
+button:hover,
+.btn:hover,
+.action-button:hover,
+.shiny-bound-input.action-button:hover,
+.shiny-bound-input.btn:hover,
+.shiny-download-link:hover,
+.shiny-download-button:hover {
+    background-color: var(--purple) !important;
+    transform: scale(1.03) !important;
+}
+
+/* Active */
+button:active,
+.btn:active,
+.action-button:active,
+.shiny-download-button:active {
+    background-color: var(--green) !important;
+    transform: scale(0.98) !important;
+}
+
+button.refined-button,
+a.refined-button,
+input.refined-button,
+.refined-button.btn,
+.refined-button.action-button {
+    max-width: 200px !important;
+    width: 100% !important;
+    display: inline-block !important;
+    padding: 8px 20px !important;
+    border-radius: 8px !important;
+    margin: 10px 0 !important; 
+}

@@ -191,3 +191,6 @@ class(merged_data$glc_date_before_t0)
 str(merged_data)
 
 names(merged_data)[names(merged_data) == "disease_actvity"] <- "disease_activity"
+
+getwd()
+setwd("C:/AURI/Thesis_bagetto")

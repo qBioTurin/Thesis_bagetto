@@ -1,0 +1,67 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: microworkflow-app
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/tmp
+    ports:
+      - "3838:3838"
+    volumes:
+      - ./data:/opt/app/data:ro
+      - ./inst/Shiny:/opt/app/inst/Shiny:ro
+      - ${HOME}:/host_home:ro
+      - shared_results:/shared_results
+      # Platform-specific mounts are configured in docker-compose.override.yml
+    env_file:
+      - path: .env
+        required: false
+    networks:
+      - microworkflow
+    restart: unless-stopped
+
+  humann3:
+    image: franky2204/humann3.9:latest
+    container_name: microworkflow-humann3
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/tmp
+    volumes:
+      - ./data:/data:ro
+      - shared_results:/shared_results
+    networks:
+      - microworkflow
+    restart: "no"
+    entrypoint: ["/bin/bash"]
+    command: ["-c", "echo 'HumanN3 image ready'"]
+
+  pipeline_tools:
+    build:
+      context: ./R/preprocess_pipeline
+      dockerfile: Dockerfile
+    image: microworkflow/pipeline-tools:latest
+    container_name: microworkflow-pipeline-tools
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/tmp
+    volumes:
+      - ./data:/data:ro
+      - shared_results:/shared_results
+    networks:
+      - microworkflow
+    restart: "no"
+    entrypoint: ["/bin/bash"]
+    command: ["-c", "echo 'Pipeline tools image ready (preprocess + db classification)'"]
+
+networks:
+  microworkflow:
+    driver: bridge
+
+volumes:
+  shared_results:
+    driver: local

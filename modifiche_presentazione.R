@@ -3740,3 +3740,4 @@ merged %>%
 
 meta <- read_csv2("C:/AURI/Thesis_bagetto/merged_final.csv") 
 
+summary(merged$age_at_T0)

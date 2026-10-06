@@ -1,0 +1,18 @@
+# Windows-specific docker-compose overrides
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.override.windows.yml up -d
+#
+# Note: On Windows with Docker Desktop:
+# - Host paths use Windows drive letters (C:, D:, etc)
+# - Docker automatically converts them to /c, /d, etc inside container
+# - Docker Desktop handles socket access via named pipe — NOT TRUE for Linux containers,
+#   the docker.sock bind mount is still required to control the host Docker engine
+# - Users should select output folders via the browser file picker or use C:\Users\<username>
+services:
+  app:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Additional Windows host paths (read-only) for easier folder selection.
+      # USERPROFILE is the safest cross-machine default on Windows.
+      - "${USERPROFILE:-C:/Users}:/host_userprofile:ro"
+      # Full C drive access (read-only). Keep this mounted only if needed.
+      - "C:/:/host_c:ro"

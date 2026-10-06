@@ -1,0 +1,11 @@
+# macOS-specific docker-compose overrides
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.override.macos.yml up -d
+# 
+# Note: On macOS, Docker Desktop mounts the socket at /var/run/docker.sock inside containers.
+# Host filesystem access is via ${HOME} which is mounted in the base compose.
+
+services:
+  app:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /Volumes:/volumes:ro

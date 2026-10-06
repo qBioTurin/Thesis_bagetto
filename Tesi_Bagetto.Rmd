@@ -12,7 +12,7 @@ All required packages were loaded from an external script (library.R) to ensure 
 ```{r data import, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-merged <- read.csv("C:/AURI/Thesis_bagetto/input/merged.csv")
+merged <- read.csv2("C:/AURI/Thesis_bagetto/input/merged.csv")
 source("library.R")
 
 ```
@@ -77,21 +77,37 @@ Both variables showed an approximately normal distribution, as confirmed by the 
 There are relatively small difference between age at diagnosis and age at baseline suggesting that, on average, patients started therapy not long after diagnosis.
 
 ```{r medas-hist, fig.width=6, fig.height=5}
-hist(merged$MEDAS,
-     main = "Histogram of MEDAS",
-     xlab = "MEDAS score",
-     col = "lightblue",
-     border = "black")
+p <- ggplot(merged, aes(x = MEDAS)) +
+  geom_histogram(binwidth = 1, fill = "lightblue", color = "black") +
+  labs(title = "Histogram of MEDAS", x = "MEDAS score")
+
+ggsave(
+  filename = "hist_MEDAS.png",
+  plot = p,
+  path = "C:/AURI/Thesis_bagetto/grafici_report_coorte",
+  width = 6,
+  height = 5,
+  dpi = 300
+)
 ```
 
 Considering the study cohort, the MEDAS score showed a mean value of approximately 47.7 with a SD of 10.6. These results suggested a moderate adherence to the Mediterranean diet. Therefore, the distribution appeared approximately normal, as confirmed by both graphical evaluation and the Shapiro–Wilk test (p = 0.13).
 
 
 ```{r bmi-boxplot, fig.width=6, fig.height=5}
-boxplot(merged$bmi,
-        main = "Boxplot of BMI",
-        ylab = "BMI",
-        col = "lightgreen")
+p <- ggplot(merged, aes(x = "", y = bmi)) +
+  geom_boxplot(fill = "lightgreen", color = "black") +
+  labs(title = "Boxplot of BMI", y = "BMI", x = "") +
+  theme_bw()
+
+ggsave(
+  filename = "boxplot_BMI.png",
+  plot = p,
+  path = "C:/AURI/Thesis_bagetto/grafici_report_coorte",
+  width = 6,
+  height = 5,
+  dpi = 300
+)
 
 ```
 BMI showed a mean value of 24.5 (SD = 3.8), indicating that, on average, patients had a body weight slightly above the normal range. However, since values ranged from 17.1 to 34.8, individuals in both underweight and overweight categories were present.
@@ -178,8 +194,8 @@ prop.table(table(merged$naive)) * 100
 table(merged$antibiotic_use)
 prop.table(table(merged$antibiotic_use)) * 100
 
-table(merged$glucocorticoid_treatment)
-prop.table(table(merged$glucocorticoid_treatment)) * 100
+table(merged$gc_treatment)
+prop.table(table(merged$gc_treatment)) * 100
 
 table(merged$cambio_terapia)
 prop.table(table(merged$cambio_terapia)) * 100
@@ -208,7 +224,7 @@ vars <- c("MEDAS", "age_at_diagnosis", "age_at_T0", "smoking_habit",
           "physical_activity", "EDSS_T0", "EDSS_T6", "EDSS_T12",
           "EDSS_T18", "EDSS_T24", "EDSS_T30", "EDSS_T36",
           "lesion_burden", "clinical_presentation", "naive", "sex",
-          "bmi", "antibiotic_use", "glucocorticoid_treatment",
+          "bmi", "antibiotic_use", "gc_treatment",
           "bone_marrow_lesions", "subtentorial_lesions",
           "gadolinium_contrast", "full_recovery")
 
@@ -228,7 +244,11 @@ print(table1)
 ```{r gtsummary}
 
 
-merged %>%
+library(gtsummary)
+library(gt)
+library(webshot2)
+
+tabella <- merged %>%
   select(all_of(vars)) %>%
   tbl_summary(
     type = list(
@@ -251,6 +271,12 @@ merged %>%
   ) %>%
   bold_labels()
 
+gt_tabella <- as_gt(tabella)
+
+gtsave(
+  data = gt_tabella,
+  filename = "C:/AURI/Thesis_bagetto/grafici_report_coorte/summary_table_EDSS.png"
+)
 
 
 ```
@@ -286,17 +312,32 @@ This descriptive analysis provides a preliminary overview of disease progression
 ```{r edss-trend, fig.width=6, fig.height=5}
 
 
-time <- c(0,6,12,18,24,30,36)
+### Median EDSS progression ####
 
-plot(time,
-     medians,
-     type="b",
-     pch=16,
-     col="blue",
-     lwd=2,
-     xlab="Months",
-     ylab="Median EDSS",
-     main="EDSS progression over time")
+time <- c(0, 6, 12, 18, 24, 30, 36)
+
+# Salvataggio del grafico
+png(
+  filename = "C:/AURI/Thesis_bagetto/grafici_report_coorte/EDSS_median_lineplot.png",
+  width = 900,
+  height = 600,
+  res = 120
+)
+
+plot(
+  time,
+  medians,
+  type = "b",
+  pch = 16,
+  col = "blue",
+  lwd = 2,
+  xlab = "Months",
+  ylab = "Median EDSS",
+  main = "EDSS progression over time"
+)
+
+dev.off()
+
 
 
 ```
@@ -306,6 +347,15 @@ The graphical representation confirms the explained pattern.
 This trend supports the presence of transient fluctuations in disability, without evidence of sustained progression over time.
 
 ```{r edss-boxplot-long, fig.width=7, fig.height=5}
+### Boxplot EDSS progression ####
+
+# Salvataggio del grafico
+png(
+  filename = "C:/AURI/Thesis_bagetto/grafici_report_coorte/EDSS_boxplot.png",
+  width = 900,
+  height = 600,
+  res = 120
+)
 
 boxplot(
   merged$EDSS_T0,
@@ -315,12 +365,15 @@ boxplot(
   merged$EDSS_T24,
   merged$EDSS_T30,
   merged$EDSS_T36,
-
-  names=c("T0","T6","T12","T18","T24","T30","T36"),
-  col="lightblue",
-  ylab="EDSS",
-  xlab="Follow-up time"
+  names = c("T0", "T6", "T12", "T18", "T24", "T30", "T36"),
+  col = "lightblue",
+  ylab = "EDSS",
+  xlab = "Follow-up time",
+  main = "EDSS progression over time"
 )
+
+dev.off()
+
 ```
 
 The boxplots provide a clear view of the distribution and variability of EDSS scores across time points. In addition, the IQRs remain relatively stable, indicating moderate variability in disability levels within the cohort.
@@ -335,22 +388,37 @@ These findings emphasize that, on one hand there's a general stability at the gr
 ```{r relapse-summary}
 
 
+### Relapse percentage over time ####
+
 relapse_perc <- c(
-  prop.table(table(merged$relapse_T6))[2]*100,
-  prop.table(table(merged$relapse_T12))[2]*100,
-  prop.table(table(merged$relapse_T18))[2]*100,
-  prop.table(table(merged$relapse_T24))[2]*100,
-  prop.table(table(merged$relapse_T30))[2]*100,
-  prop.table(table(merged$relapse_T36))[2]*100
+  prop.table(table(merged$relapse_T6))[2] * 100,
+  prop.table(table(merged$relapse_T12))[2] * 100,
+  prop.table(table(merged$relapse_T18))[2] * 100,
+  prop.table(table(merged$relapse_T24))[2] * 100,
+  prop.table(table(merged$relapse_T30))[2] * 100,
+  prop.table(table(merged$relapse_T36))[2] * 100
 )
 
-time <- c("T6","T12","T18","T24", "T30", "T36")
+time <- c("T6", "T12", "T18", "T24", "T30", "T36")
 
-barplot(relapse_perc,
-        names.arg=time,
-        col="tomato",
-        ylab="% patients with relapse",
-        main="Relapse occurrence over time")
+# Salvataggio del grafico
+png(
+  filename = "C:/AURI/Thesis_bagetto/grafici_report_coorte/relapse_percentage_barplot.png",
+  width = 900,
+  height = 600,
+  res = 120
+)
+
+barplot(
+  relapse_perc,
+  names.arg = time,
+  col = "tomato",
+  ylab = "% patients with relapse",
+  main = "Relapse occurrence over time"
+)
+
+dev.off()
+
 
 ```
 
@@ -362,23 +430,41 @@ Overall, these findings suggest variability in disease activity over time, witho
 ```{r lesion-trend, fig.width=6, fig.height=5}
 
 
+### Lesion percentage over time ####
+
 lesioni_perc <- c(
-  mean(merged$lesioni_T6 == "1", na.rm=TRUE) * 100,
-  mean(merged$lesioni_T12 == "1", na.rm=TRUE) * 100,
-  mean(merged$lesioni_T18 == "1", na.rm=TRUE) * 100,
-  mean(merged$lesioni_T24 == "1", na.rm=TRUE) * 100,
-  mean(merged$lesioni_T30 == "1", na.rm=TRUE) * 100,
-  mean(merged$lesioni_T36 == "1", na.rm=TRUE) * 100
+  mean(merged$lesioni_T6 == "1", na.rm = TRUE) * 100,
+  mean(merged$lesioni_T12 == "1", na.rm = TRUE) * 100,
+  mean(merged$lesioni_T18 == "1", na.rm = TRUE) * 100,
+  mean(merged$lesioni_T24 == "1", na.rm = TRUE) * 100,
+  mean(merged$lesioni_T30 == "1", na.rm = TRUE) * 100,
+  mean(merged$lesioni_T36 == "1", na.rm = TRUE) * 100
 )
 
-plot(c(6,12,18,24,30,36),
-     lesioni_perc,
-     type="b",
-     pch=16,
-     lwd=2,
-     col="darkgreen",
-     xlab="Months",
-     ylab="% patients with new lesions")
+# Timepoints numerici per il plot
+time_months <- c(6, 12, 18, 24, 30, 36)
+
+# Salvataggio del grafico
+png(
+  filename = "C:/AURI/Thesis_bagetto/grafici_report_coorte/lesion_percentage_lineplot.png",
+  width = 900,
+  height = 600,
+  res = 120
+)
+
+plot(
+  time_months,
+  lesioni_perc,
+  type = "b",
+  pch = 16,
+  lwd = 2,
+  col = "darkgreen",
+  xlab = "Months",
+  ylab = "% patients with new lesions",
+  main = "Lesion occurrence over time"
+)
+
+dev.off()
 
 
 ```
