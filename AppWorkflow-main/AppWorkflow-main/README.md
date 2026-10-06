@@ -38,7 +38,7 @@ Supported pipelines:
 - Pathway differential analysis (MaAsLin3) and pathway barplot generation.
 - Export of key visual outputs to PDF and analysis artifacts to RDS/TSV/CSV.
 
-## 3. System Requirements
+### 3. System Requirements
 
 ### Operating system
 
