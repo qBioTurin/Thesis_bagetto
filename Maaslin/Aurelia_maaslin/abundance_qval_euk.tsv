@@ -1,3 +1,0 @@
-"feature"	"metadata"	"value"	"name"	"coef"	"null_hypothesis"	"stderr"	"pval_individual"	"qval_individual"	"pval_joint"	"qval_joint"	"error"	"model"	"N"	"N_not_zero"
-"Saccharomyces_cerevisiae"	"tempo"	"T1"	"tempoT1"	0.21736003809566	0	0.0940598006196853	0.0365878447849324	0.0914696119623311	0.0365878447849324	0.0914696119623311	NA	"abundance"	63	24
-"Saccharomyces_cerevisiae"	"tempo"	"T12"	"tempoT12"	0.237547337049338	0	0.101314651206267	0.034311478092147	0.0914696119623311	0.034311478092147	0.0914696119623311	NA	"abundance"	63	24

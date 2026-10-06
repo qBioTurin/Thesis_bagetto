@@ -1,5 +1,0 @@
-"feature"	"metadata"	"value"	"name"	"coef"	"null_hypothesis"	"stderr"	"pval_individual"	"qval_individual"	"pval_joint"	"qval_joint"	"error"	"model"	"N"	"N_not_zero"
-"Saccharomyces_cerevisiae"	"tempo"	"T1"	"tempoT1"	0.21736003809566	0	0.0940598006196853	0.0365878447849324	0.0914696119623311	0.0365878447849324	0.0914696119623311	NA	"abundance"	63	24
-"Saccharomyces_cerevisiae"	"tempo"	"T12"	"tempoT12"	0.237547337049338	0	0.101314651206267	0.034311478092147	0.0914696119623311	0.034311478092147	0.0914696119623311	NA	"abundance"	63	24
-"Saccharomyces_cerevisiae"	"tempo"	"T1"	"tempoT1"	-3.06514643221263e-14	0	0.646345941441873	0.999999999999962	NA	0.0365878447849324	0.0914696119623311	"#successi non interi in un binomial glm!"	"prevalence"	63	24
-"Saccharomyces_cerevisiae"	"tempo"	"T12"	"tempoT12"	-0.220313918856245	0	0.661549070049193	0.739113655023438	NA	0.034311478092147	0.0914696119623311	"#successi non interi in un binomial glm!"	"prevalence"	63	24
